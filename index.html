@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Wayground - Hexa-Master Study Suite</title>
+  <style>
+    :root {
+      --wg-bg: #0b0914;
+      --wg-card: #151128;
+      --wg-border: #292147;
+      --wg-purple: #7000ff;
+      --wg-purple-glow: rgba(112, 0, 255, 0.4);
+      --wg-pink: #ff007f;
+      --wg-cyan: #00f0ff;
+      --wg-yellow: #ffcc00;
+      --wg-green: #00e676;
+      --wg-red: #ff3366;
+      --wg-text: #ffffff;
+      --wg-subtext: #9a94b8;
+      --font-main: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    [data-theme="light"] {
+      --wg-bg: #f0edfa;
+      --wg-card: #ffffff;
+      --wg-border: #d4ceeb;
+      --wg-purple: #6200ee;
+      --wg-purple-glow: rgba(98, 0, 238, 0.2);
+      --wg-pink: #d81b60;
+      --wg-cyan: #00b0ff;
+      --wg-yellow: #f57f17;
+      --wg-green: #2e7d32;
+      --wg-red: #c62828;
+      --wg-text: #1a1528;
+      --wg-subtext: #5e5875;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: var(--font-main);
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--wg-bg);
+      color: var(--wg-text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 10px;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    header {
+      background: var(--wg-card);
+      border: 1px solid var(--wg-border);
+      border-radius: 18px;
+      padding: 12px 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-badge {
+      background: linear-gradient(135deg, var(--wg-purple), var(--wg-pink));
+      color: #fff;
+      font-weight: 900;
+      font-size: 1.1rem;
+      padding: 4px 10px;
+      border-radius: 10px;
+      box-shadow: 0 0 12px var(--wg-purple-glow);
+    }
+
+    .brand-title {
+      font-size: 1rem;
+      font-weight: 800;
+      color: var(--wg-text);
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .xp-pill {
+      background: rgba(255, 204, 0, 0.15);
+      border: 1px solid var(--wg-yellow);
+      color: var(--wg-yellow);
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 800;
+    }
+
+    .theme-toggle {
+      background: none;
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+
+    .back-menu-btn {
+      background: rgba(112, 0, 255, 0.2);
+      border: 1px solid var(--wg-purple);
+      color: var(--wg-cyan);
+      padding: 6px 12px;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s;
+    }
+
+    .back-menu-btn:active {
+      transform: scale(0.95);
+    }
+
+    .hub-container {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 6px;
+    }
+
+    .hub-title {
+      font-size: 1.4rem;
+      font-weight: 900;
+      text-align: center;
+      background: linear-gradient(135deg, var(--wg-cyan), var(--wg-pink));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hub-subtitle {
+      font-size: 0.85rem;
+      color: var(--wg-subtext);
+      text-align: center;
+      margin-top: -8px;
+    }
+
+    .subject-card {
+      background: var(--wg-card);
+      border: 2px solid var(--wg-border);
+      border-radius: 18px;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+      position: relative;
+    }
+
+    .subject-card:hover {
+      border-color: var(--wg-purple);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--wg-purple-glow);
+    }
+
+    .subject-card.mega-card {
+      border-color: var(--wg-yellow);
+      background: linear-gradient(135deg, var(--wg-card), rgba(255, 204, 0, 0.08));
+    }
+
+    .subject-icon {
+      font-size: 1.8rem;
+    }
+
+    .subject-name {
+      font-size: 1.05rem;
+      font-weight: 800;
+    }
+
+    .subject-desc {
+      font-size: 0.8rem;
+      color: var(--wg-subtext);
+      line-height: 1.35;
+    }
+
+    .subject-badge {
+      align-self: flex-start;
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid var(--wg-cyan);
+      color: var(--wg-cyan);
+      padding: 3px 8px;
+      border-radius: 8px;
+      font-size: 0.7rem;
+      font-weight: 800;
+    }
+
+    .subject-badge.gold-badge {
+      background: rgba(255, 204, 0, 0.15);
+      border-color: var(--wg-yellow);
+      color: var(--wg-yellow);
+    }
+
+    nav {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 6px;
+      background: var(--wg-card);
+      padding: 6px;
+      border-radius: 16px;
+      border: 1px solid var(--wg-border);
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--wg-subtext);
+      padding: 10px 4px;
+      border-radius: 12px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      transition: all 0.2s ease;
+    }
+
+    .nav-btn.active {
+      background: var(--wg-purple);
+      color: #ffffff;
+      box-shadow: 0 4px 14px var(--wg-purple-glow);
+    }
+
+    .view {
+      display: none;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .view.active {
+      display: flex;
+    }
+
+    .wg-card {
+      background: var(--wg-card);
+      border: 1px solid var(--wg-border);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .quiz-stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 800;
+      margin-bottom: 12px;
+    }
+
+    .question-box {
+      font-size: 1.02rem;
+      font-weight: 700;
+      line-height: 1.4;
+      color: var(--wg-text);
+      margin-bottom: 16px;
+    }
+
+    .options-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .opt-btn {
+      background: var(--wg-bg);
+      border: 2px solid var(--wg-border);
+      color: var(--wg-text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .opt-btn:active {
+      transform: scale(0.98);
+    }
+
+    .opt-btn.correct {
+      background: rgba(0, 230, 118, 0.15);
+      border-color: var(--wg-green);
+      color: var(--wg-green);
+      font-weight: 800;
+    }
+
+    .opt-btn.incorrect {
+      background: rgba(255, 51, 102, 0.15);
+      border-color: var(--wg-red);
+      color: var(--wg-red);
+    }
+
+    .exp-box {
+      margin-top: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid var(--wg-cyan);
+      color: var(--wg-text);
+      font-size: 0.83rem;
+      line-height: 1.4;
+      display: none;
+    }
+
+    .action-btn {
+      background: linear-gradient(135deg, var(--wg-purple), var(--wg-pink));
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 14px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+      width: 100%;
+      margin-top: 12px;
+      box-shadow: 0 4px 14px var(--wg-purple-glow);
+    }
+
+    .action-btn:active {
+      transform: scale(0.98);
+    }
+
+    .results-box {
+      text-align: center;
+      padding: 24px 16px;
+    }
+
+    .score-circle {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--wg-purple), var(--wg-pink));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 900;
+      margin: 16px auto;
+      box-shadow: 0 0 20px var(--wg-purple-glow);
+    }
+
+    .retry-mistakes {
+      background: linear-gradient(135deg, #ff3366, #ff007f);
+      box-shadow: 0 4px 14px rgba(255, 51, 102, 0.4);
+    }
+
+    .match-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .match-card {
+      background: var(--wg-bg);
+      border: 2px solid var(--wg-border);
+      border-radius: 14px;
+      padding: 10px 6px;
+      min-height: 70px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s;
+    }
+
+    .match-card.selected {
+      border-color: var(--wg-cyan);
+      background: rgba(0, 240, 255, 0.15);
+      transform: scale(0.96);
+    }
+
+    .match-card.matched {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .fc-wrapper {
+      perspective: 1000px;
+      width: 100%;
+      height: 220px;
+      cursor: pointer;
+    }
+
+    .fc-card {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.5s cubic-bezier(0.4, 0.2, 0.2, 1);
+      border-radius: 20px;
+    }
+
+    .fc-card.flipped {
+      transform: rotateY(180deg);
+    }
+
+    .fc-front, .fc-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      background: var(--wg-card);
+      border: 2px solid var(--wg-border);
+      border-radius: 20px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+    }
+
+    .fc-back {
+      transform: rotateY(180deg);
+      border-color: var(--wg-purple);
+      background: linear-gradient(135deg, var(--wg-card), var(--wg-bg));
+    }
+
+    .fc-cat {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 800;
+      color: var(--wg-cyan);
+      margin-bottom: 8px;
+      letter-spacing: 1px;
+    }
+
+    .fc-title {
+      font-size: 1.2rem;
+      font-weight: 800;
+      color: var(--wg-text);
+    }
+
+    .fc-desc {
+      font-size: 0.88rem;
+      line-height: 1.4;
+      color: var(--wg-text);
+    }
+
+    .fc-controls {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .fc-btn {
+      flex: 1;
+      background: var(--wg-card);
+      border: 1px solid var(--wg-border);
+      color: var(--wg-text);
+      padding: 12px;
+      border-radius: 12px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+
+    .search-input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 12px;
+      border: 2px solid var(--wg-border);
+      background: var(--wg-bg);
+      color: var(--wg-text);
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+      outline: none;
+    }
+
+    .cheat-row {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--wg-border);
+    }
+
+    .cheat-row:last-child {
+      border-bottom: none;
+    }
+
+    .cheat-head {
+      font-size: 0.88rem;
+      font-weight: 800;
+      color: var(--wg-yellow);
+      margin-bottom: 2px;
+    }
+
+    .cheat-body {
+      font-size: 0.83rem;
+      color: var(--wg-subtext);
+      line-height: 1.35;
+    }
+
+    .mnemonic-banner {
+      background: rgba(112, 0, 255, 0.15);
+      border: 1px solid var(--wg-purple);
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.8rem;
+      text-align: center;
+      margin-bottom: 10px;
+      font-weight: 600;
+    }
+
+    .mnemonic-banner span {
+      color: var(--wg-cyan);
+      font-weight: 800;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <header>
+      <div class="brand">
+        <button class="back-menu-btn" id="backMenuBtn">⬅️ Main Menu</button>
+        <span class="logo-badge" id="appLogo">W</span>
+        <span class="brand-title" id="appTitle">WAYGROUND</span>
+      </div>
+      <div class="user-profile">
+        <div class="xp-pill">⚡ <span id="xpVal">500</span> XP</div>
+        <button class="theme-toggle" id="themeBtn" title="Theme Mode">🌙</button>
+      </div>
+    </header>
+
+    <div id="hubView" class="hub-container">
+      <div class="hub-title">Wayground Multi-Subject Exam Suite</div>
+      <div class="hub-subtitle">Choose a track to start the exam reviewer arcade</div>
+
+      <div class="subject-card mega-card" id="selectMega">
+        <div class="subject-icon">🔥</div>
+        <div class="subject-name">Comprehensive Mega Exam Track</div>
+        <div class="subject-desc">Exhaustive exam simulator compiling questions across PF3, NC101, OOP (SDF 104), and PIC (Indigenous Peoples).</div>
+        <div class="subject-badge gold-badge">150 Questions • Full PDF Coverage</div>
+      </div>
+
+      <div class="subject-card" id="selectPF3">
+        <div class="subject-icon">💃</div>
+        <div class="subject-name">Physical Fitness 3 (PF3)</div>
+        <div class="subject-desc">Exhaustive reviewer on social dance etiquette, dance positions, Cha Cha, Swing, Tango, street dance, and hip-hop culture.</div>
+        <div class="subject-badge">50 Questions • Dance & Health</div>
+      </div>
+
+      <div class="subject-card" id="selectNC101">
+        <div class="subject-icon">🌐</div>
+        <div class="subject-name">Networks & Communication (NC101)</div>
+        <div class="subject-desc">Exhaustive reviewer on network protocols (DNS, DHCP, HTTP, FTP, SMTP), CIA triad, firewalls, encryption, cloud models, and SNMP.</div>
+        <div class="subject-badge">50 Questions • Protocols & Security</div>
+      </div>
+
+      <div class="subject-card" id="selectOOP">
+        <div class="subject-icon">💻</div>
+        <div class="subject-name">Object-Oriented Programming (SDF 104)</div>
+        <div class="subject-desc">Exhaustive reviewer on WinForms controls (TextBox, Label, RadioButton, CheckBox, TabControl, DataGridView) and ADO.NET.</div>
+        <div class="subject-badge">50 Questions • WinForms & ADO.NET</div>
+      </div>
+
+      <div class="subject-card" id="selectPIC">
+        <div class="subject-icon">🌿</div>
+        <div class="subject-name">Indigenous Peoples of the Philippines (PIC)</div>
+        <div class="subject-desc">Exhaustive reviewer on IPRA (RA 8371), CADT, CALT, FPIC, NCIP, UNDRIP, regional ethnolinguistic groups, and IKSP.</div>
+        <div class="subject-badge">50 Questions • Weeks 10-18 Reviewer</div>
+      </div>
+
+      <div class="subject-card" id="selectArtApp">
+        <div class="subject-icon">🎨</div>
+        <div class="subject-name">Art Appreciation Reviewer</div>
+        <div class="subject-desc">Covering visual elements, principles of design, historical movements, appropriation, soul-making, and indigenous arts.</div>
+        <div class="subject-badge">50 Questions • Visual Arts & Culture</div>
+      </div>
+
+      <div class="subject-card" id="selectAutomata">
+        <div class="subject-icon">🤖</div>
+        <div class="subject-name">Automata Theory Reviewer</div>
+        <div class="subject-desc">Covering set operations, graph theory, DFA, Mealy & Moore machines, regular expressions, and Python re module.</div>
+        <div class="subject-badge">50 Questions • Computation & Graphs</div>
+      </div>
+    </div>
+
+    <div id="arcadeArea" style="display: none; flex-direction: column; gap: 12px;">
+      <nav>
+        <button class="nav-btn active" data-target="quizView">🎯 <span>Arena</span></button>
+        <button class="nav-btn" data-target="matchView">⚡ <span>Match</span></button>
+        <button class="nav-btn" data-target="cardsView">🎴 <span>Cards</span></button>
+        <button class="nav-btn" data-target="sheetView">📜 <span>Sheet</span></button>
+      </nav>
+
+      <div id="quizView" class="view active">
+        <div class="wg-card" id="quizCard">
+          <div class="quiz-stats">
+            <span id="quizProgress" style="color:var(--wg-cyan)">Q 1/50</span>
+            <span id="quizStreak" style="color:var(--wg-yellow)">🔥 Streak: 0</span>
+            <span id="quizScore">Score: 0</span>
+          </div>
+
+          <div class="question-box" id="questionBox">Loading questions...</div>
+
+          <div class="options-grid" id="optionsGrid"></div>
+
+          <div class="exp-box" id="expBox"></div>
+        </div>
+
+        <div class="wg-card results-box" id="resultsCard" style="display: none;">
+          <h2>🏆 Round Finished!</h2>
+          <div class="score-circle" id="finalScoreCircle">0%</div>
+          <p id="resultsText" style="color:var(--wg-subtext)">Keep training your mastery!</p>
+
+          <div style="margin-top: 16px; display: flex; flex-direction: column; gap: 10px;">
+            <button class="action-btn retry-mistakes" id="retryMistakesBtn" style="display: none;">
+              🔄 Retake Mistakes Only (<span id="mistakeCount">0</span>)
+            </button>
+            <button class="action-btn" id="restartQuizBtn">
+              🎮 Restart Full Arena
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="matchView" class="view">
+        <div class="wg-card">
+          <div class="quiz-stats">
+            <span style="color:var(--wg-cyan)">⚡ Match Madness</span>
+            <span id="matchMoves" style="color:var(--wg-yellow)">Moves: 0</span>
+          </div>
+          <p style="font-size:0.8rem; color:var(--wg-subtext); margin-bottom:10px;">Pair every concept term with its correct definition!</p>
+          
+          <div class="match-grid" id="matchGrid"></div>
+          <button class="action-btn" id="resetMatchBtn" style="margin-top:14px;">Reset Game Grid</button>
+        </div>
+      </div>
+
+      <div id="cardsView" class="view">
+        <div class="mnemonic-banner" id="mnemonicBanner">
+          💡 <b>Memory Tip:</b> <span>Review Core Concepts Daily</span>
+        </div>
+
+        <div class="fc-wrapper" id="fcWrapper">
+          <div class="fc-card" id="fcCard">
+            <div class="fc-front">
+              <div class="fc-cat" id="fcCat">Category</div>
+              <div class="fc-title" id="fcTitle">Term</div>
+              <p style="font-size:0.75rem; color:var(--wg-cyan); margin-top:14px;">(Tap Card to Flip)</p>
+            </div>
+            <div class="fc-back">
+              <div class="fc-desc" id="fcDesc">Definition</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="fc-controls">
+          <button class="fc-btn" id="fcPrev">◀ Prev</button>
+          <span id="fcCounter" style="font-size:0.85rem; font-weight:800;">1 / 15</span>
+          <button class="fc-btn" id="fcNext">Next ▶</button>
+        </div>
+      </div>
+
+      <div id="sheetView" class="view">
+        <div class="wg-card">
+          <input type="text" class="search-input" id="sheetSearch" placeholder="🔍 Search exam terms..." />
+          <div id="cheatList"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /* ==================== 1. PF3 DATASET (50 UNIQUE ITEMS) ==================== */
+    const PF3_QUESTIONS = [
+      { q: "What is the main purpose of social dancing?", options: ["To encourage social interaction through dance", "To win competitive trophies", "To perform isolated solo routines", "To practice high jumping"], correctText: "To encourage social interaction through dance", exp: "The main purpose of social dancing is to encourage social interaction through dance[cite: 22]." },
+      { q: "Which quality is most important when dancing with a partner?", options: ["Respect", "Aggressive leading", "High speed", "Complex footwear"], correctText: "Respect", exp: "Respect is the quality that is essential when dancing with a partner[cite: 22]." },
+      { q: "In what setting does social dance usually take place?", options: ["Where people can interact and enjoy themselves", "In a silent laboratory", "In a strict athletic arena", "In solo isolation"], correctText: "Where people can interact and enjoy themselves", exp: "Social dance takes place in settings for interaction and enjoyment[cite: 22]." },
+      { q: "Why is communication important between dance partners?", options: ["It helps partners coordinate movements", "It replaces musical rhythm", "It decides clothing styles", "It measures jump height"], correctText: "It helps partners coordinate movements", exp: "Communication helps partners coordinate movements[cite: 22]." },
+      { q: "Which behavior demonstrates good social-dance etiquette?", options: ["Respecting personal space", "Ignoring partner boundaries", "Rushing the triple step", "Pushing other couples"], correctText: "Respecting personal space", exp: "Respecting personal space shows good social-dance etiquette[cite: 22]." },
+      { q: "What position describes partners facing each other while holding hands?", options: ["Open position", "Closed position", "Shadow position", "Tango frame"], correctText: "Open position", exp: "In open position, partners face each other and hold hands[cite: 22]." },
+      { q: "What characterizes the closed position in partner dancing?", options: ["Partners face each other while maintaining a dance hold", "Partners face away without touching", "Partners hold hands at full arms-length", "Partners sit back-to-back"], correctText: "Partners face each other while maintaining a dance hold", exp: "In closed position, partners maintain a connected dance hold[cite: 22]." },
+      { q: "Why are basic dance positions important?", options: ["They provide a safe starting point for movement", "They eliminate the need for rhythm", "They guarantee contest wins", "They restrict choreography"], correctText: "They provide a safe starting point for movement", exp: "Basic dance positions provide a safe starting point for movement[cite: 22]." },
+      { q: "Why does a couple change from closed to open position before traveling apart?", options: ["To create space for the next movement", "To rest their arms", "To signal a song change", "To stop dancing"], correctText: "To create space for the next movement", exp: "Changing to open position creates space for subsequent movements[cite: 22]." },
+      { q: "What action best demonstrates proper partner positioning?", options: ["Maintaining comfortable distance and clear connection", "Pulling the partner forcefully", "Staring at the floor", "Dancing out of synchronization"], correctText: "Maintaining comfortable distance and clear connection", exp: "Proper positioning requires comfortable distance and clear connection[cite: 22]." },
+      { q: "What is a characteristic feature of the Cha Cha?", options: ["A lively rhythm with a characteristic triple step", "Slow sweeping waltz turns", "Acrobatic floor freezes", "Robotic locking moves"], correctText: "A lively rhythm with a characteristic triple step", exp: "Cha Cha is characterized by a lively rhythm with a triple step[cite: 22]." },
+      { q: "How is the basic Cha-Cha pattern commonly described?", options: ["Two slow steps and a cha-cha-cha triple step", "Four fast leaps and a spin", "Running in place continuously", "Single step forward and hold"], correctText: "Two slow steps and a cha-cha-cha triple step", exp: "The basic Cha-Cha pattern is two slow steps and a cha-cha-cha triple step[cite: 22]." },
+      { q: "What timing should dancers maintain while performing Cha Cha?", options: ["Strict rhythmic timing matching the music", "Random timing", "Always rushing ahead", "Silent static timing"], correctText: "Strict rhythmic timing matching the music", exp: "Cha Cha requires maintaining clear timing and rhythm matching the music[cite: 22]." },
+      { q: "If a dancer keeps rushing the triple step in Cha Cha, what skill should they improve?", options: ["Timing and rhythm", "Clothing size", "Arm reach", "Jumping power"], correctText: "Timing and rhythm", exp: "Rushing the triple step requires improving timing and rhythm[cite: 22]." },
+      { q: "Which performance choice demonstrates good Cha Cha technique?", options: ["Clear timing, controlled steps, and rhythmic hip action", "Stiff posture and random timing", "Fast running without music", "Exaggerated arm flailing"], correctText: "Clear timing, controlled steps, and rhythmic hip action", exp: "Good Cha Cha technique shows clear timing, controlled steps, and hip action[cite: 22]." },
+      { q: "What is a common characteristic of Swing dance?", options: ["Energetic movements and rhythmic partner interaction", "Slow dramatic pauses", "Acrobatic headspins", "Silent floor steps"], correctText: "Energetic movements and rhythmic partner interaction", exp: "Swing dance is characterized by energetic movements and rhythmic interaction[cite: 22]." },
+      { q: "Swing developed strongly in connection with which musical tradition?", options: ["Jazz", "Classical opera", "Heavy metal", "Gregorian chant"], correctText: "Jazz", exp: "Swing developed strongly in connection with jazz music[cite: 22]." },
+      { q: "Why is rhythm important in Swing dance?", options: ["It helps dancers match their movements with the music", "It determines outfit colors", "It replaces lead-and-follow rules", "It dictates room lighting"], correctText: "It helps dancers match their movements with the music", exp: "Rhythm enables dancers to match their movements with music[cite: 22]." },
+      { q: "If two Swing partners lose synchronization, what should they check first?", options: ["Their timing and connection to the beat", "Their shoe brand", "The room temperature", "Their microphone volume"], correctText: "Their timing and connection to the beat", exp: "Losing synchronization requires checking timing and connection to the beat[cite: 22]." },
+      { q: "Which choice best demonstrates good Swing dancing?", options: ["Energetic movement while keeping timing and partner connection", "Dancing out of sync with maximum speed", "Standing still during jazz solos", "Ignoring partner holds"], correctText: "Energetic movement while keeping timing and partner connection", exp: "Good Swing combines energetic movement with timing and partner connection[cite: 22]." },
+      { q: "What is a recognizable feature of Tango?", options: ["Controlled, precise, and dramatic movements", "Bouncing up and down continuously", "Lively triple steps", "Acrobatic breakdance freezes"], correctText: "Controlled, precise, and dramatic movements", exp: "Tango is recognized by controlled, precise, and dramatic movements[cite: 22]." },
+      { q: "Tango is commonly associated with which region of origin?", options: ["Argentina and Uruguay", "The Bronx, New York City", "Vienna, Austria", "Havana, Cuba"], correctText: "Argentina and Uruguay", exp: "Tango originated in Argentina and Uruguay[cite: 22]." },
+      { q: "What is important for maintaining harmony in a Tango partnership?", options: ["Clear lead-and-follow communication", "Loud verbal commands", "Random weight changes", "Dancing without touching"], correctText: "Clear lead-and-follow communication", exp: "Clear lead-and-follow communication is essential in Tango[cite: 22]." },
+      { q: "If a Tango dancer uses sharp movements but loses balance, what should be improved?", options: ["Posture, control, and weight transfer", "Movement speed", "Outfit choice", "Music volume"], correctText: "Posture, control, and weight transfer", exp: "Losing balance indicates a need to improve posture, control, and weight transfer[cite: 22]." },
+      { q: "Which performance best reflects authentic Tango style?", options: ["Controlled steps, strong posture, and expressive timing", "Casual loose bouncing with random steps", "Fast running across the floor", "Acrobatic flips"], correctText: "Controlled steps, strong posture, and expressive timing", exp: "Tango style relies on controlled steps, strong posture, and expressive timing[cite: 22]." },
+      { q: "Street dance developed largely in what setting?", options: ["Informal community and urban environments", "Formal ballroom dance academies", "Symphony concert halls", "Sterile gymnasiums"], correctText: "Informal community and urban environments", exp: "Street dance developed in informal community and urban environments[cite: 22]." },
+      { q: "Where did hip-hop culture emerge prominently?", options: ["The Bronx, New York City", "Buenos Aires, Argentina", "Vienna, Austria", "London, UK"], correctText: "The Bronx, New York City", exp: "Hip-hop culture emerged prominently in the Bronx, New York City[cite: 22]." },
+      { q: "Why is street dance often connected with community culture?", options: ["It provided creative expression and social interaction", "It was created for formal ballroom testing", "It requires expensive standard uniforms", "It avoids social contact"], correctText: "It provided creative expression and social interaction", exp: "Street dance connects with community culture through expression and social interaction[cite: 23]." },
+      { q: "How does street dance help young people express themselves?", options: ["Through movement, music, style, and creativity", "Through silent meditation", "Through written exams", "Through sports statistics"], correctText: "Through movement, music, style, and creativity", exp: "Street dance aids self-expression via movement, music, style, and creativity[cite: 23]." },
+      { q: "When studying how street dance spreads across communities, what factor is irrelevant?", options: ["Only the dancers' clothing sizes", "Cultural adaptations", "Local musical influences", "Community traditions"], correctText: "Only the dancers' clothing sizes", exp: "Examining clothing sizes alone does not reveal cultural spread[cite: 23]." },
+      { q: "Which health-related fitness component can street dance significantly improve?", options: ["Cardiorespiratory endurance", "Only grip strength", "Vocal power", "Eye sight"], correctText: "Cardiorespiratory endurance", exp: "Street dance improves cardiorespiratory endurance[cite: 23]." },
+      { q: "Regular street dance helps improve coordination because dancers must:", options: ["Control different body movements with rhythm", "Wear heavy boots", "Dance in silence", "Keep their eyes closed"], correctText: "Control different body movements with rhythm", exp: "Coordination improves as dancers control different body parts rhythmically[cite: 23]." },
+      { q: "How does continuous dancing support cardiovascular fitness?", options: ["Continuous dancing can elevate the heart rate", "It lowers blood circulation", "It keeps muscles completely static", "It slows lung expansion"], correctText: "Continuous dancing can elevate the heart rate", exp: "Elevating heart rate through continuous dance supports cardiovascular health[cite: 23]." },
+      { q: "If a student becomes tired quickly during a dance routine, which fitness area should be developed?", options: ["Cardiorespiratory endurance", "Flexibility only", "Reaction time", "Body height"], correctText: "Cardiorespiratory endurance", exp: "Tiring quickly indicates a need for cardiorespiratory endurance[cite: 23]." },
+      { q: "What practice is most appropriate for improving fitness safely through street dance?", options: ["Dancing regularly with safe intensity and proper warm-up practice", "Dancing intensely without warming up", "Practicing once a month", "Sprinting on concrete without shoes"], correctText: "Dancing regularly with safe intensity and proper warm-up practice", exp: "Regular practice with safe intensity and warm-ups improves fitness safely[cite: 23]." },
+      { q: "How is Hip-hop best described?", options: ["A culture involving music, dance, art, and expression", "A single ballroom step", "A strict classical music genre", "A sports training program"], correctText: "A culture involving music, dance, art, and expression", exp: "Hip-hop is a culture involving music, dance, art, and expression[cite: 23]." },
+      { q: "Which dance style is strongly associated with hip-hop culture?", options: ["Breaking", "Tango", "Waltz", "Cha Cha"], correctText: "Breaking", exp: "Breaking is a foundational dance style in hip-hop culture[cite: 23]." },
+      { q: "What elements are important when performing hip-hop choreography?", options: ["Musicality, groove, and personal expression", "Stiff formal alignment and silence", "Ballroom holds and frame", "Robotic count-following only"], correctText: "Musicality, groove, and personal expression", exp: "Hip-hop performance relies on musicality, groove, and personal expression[cite: 23]." },
+      { q: "What skill is demonstrated when a dancer changes a movement to match a strong beat in the music?", options: ["Musicality", "Weight transfer", "Isolation", "Running man"], correctText: "Musicality", exp: "Matching movement to musical accents demonstrates musicality[cite: 23]." },
+      { q: "Which performance choice best supports hip-hop expression?", options: ["Using controlled movement while adding individual style", "Strictly copying ballroom rules", "Dancing off-beat continuously", "Remaining completely static"], correctText: "Using controlled movement while adding individual style", exp: "Controlled movement infused with individual style supports hip-hop expression[cite: 23]." },
+      { q: "Which of the following is commonly considered an element of hip-hop culture?", options: ["DJing", "Ballet pointe work", "Operatic singing", "Waltz framing"], correctText: "DJing", exp: "DJing is one of the foundational elements of hip-hop culture[cite: 23]." },
+      { q: "Why is weight transfer important when dancing?", options: ["It is important for maintaining balance and performing steps correctly", "It makes the dancer look heavier", "It slows down the performance", "It eliminates rhythm"], correctText: "It is important for maintaining balance and performing steps correctly", exp: "Weight transfer maintains balance and correct step execution[cite: 23]." },
+      { q: "What dance is characterized by acrobatic moves, freezes, and footwork?", options: ["Breaking", "Tango", "Swing", "Cha Cha"], correctText: "Breaking", exp: "Breaking features acrobatic moves, freezes, and complex footwork[cite: 23]." },
+      { q: "In street dance terminology, what does 'bounce' mean?", options: ["Bending the knees and moving the body up and down with the beat", "Jumping off walls", "Bouncing off partner shoulders", "Running rapidly"], correctText: "Bending the knees and moving the body up and down with the beat", exp: "Bounce involves knee-bending and vertical body motion with the beat[cite: 23]." },
+      { q: "Which movement creates the illusion of running in place?", options: ["Running Man", "Moonwalk", "Isolation", "Spin"], correctText: "Running Man", exp: "The Running Man move creates the illusion of running in place[cite: 23]." },
+      { q: "If a dancer moves the shoulders while keeping the hips relatively still, what fundamental skill is shown?", options: ["Isolation", "Musicality", "Weight transfer", "Bounce"], correctText: "Isolation", exp: "Moving one body part independently shows body isolation[cite: 23]." },
+      { q: "If a dancer performs a routine but is always late on the beat, what skills need development?", options: ["Timing and musicality", "Partner height", "Outfit selection", "Physical size"], correctText: "Timing and musicality", exp: "Lags on the beat require improving timing and musicality[cite: 23]." },
+      { q: "What lesson plan is most appropriate when creating a short hip-hop routine for beginners?", options: ["Start with groove, basic steps, isolations, and simple combinations", "Begin immediately with advanced power headspins", "Practice silent standing poses", "Focus on formal ballroom holds"], correctText: "Start with groove, basic steps, isolations, and simple combinations", exp: "Beginner routines should start with groove, basic steps, isolations, and combinations[cite: 23]." },
+      { q: "Why is warm-up practice essential before street dancing?", options: ["It prepares muscles and heart rate to prevent injury during intense movement", "It satisfies venue rules", "It teaches choreography lyrics", "It changes clothing fit"], correctText: "It prepares muscles and heart rate to prevent injury during intense movement", exp: "Proper warm-ups prepare the cardiovascular system and muscles for safe dance[cite: 23]." },
+      { q: "Which element combines music, dance, art (graffiti), and oral expression (MCing)?", options: ["Hip-hop culture", "Ballroom discipline", "Classical ballet", "Modern folk dance"], correctText: "Hip-hop culture", exp: "Hip-hop encompasses music, dance, graffiti art, and oral expression[cite: 23]." }
+    ];
+
+    /* ==================== 2. NC101 DATASET (50 UNIQUE ITEMS) ==================== */
+    const NC101_QUESTIONS = [
+      { q: "What is a network protocol?", options: ["A set of rules devices follow to send, receive, and understand data", "A physical ethernet cable format", "A server cooling system", "A hardware firewall chip"], correctText: "A set of rules devices follow to send, receive, and understand data", exp: "A network protocol defines the rules for device communication[cite: 37]." },
+      { q: "Which protocol converts domain names (e.g., google.com) into IP addresses?", options: ["DNS", "DHCP", "HTTP", "SMTP"], correctText: "DNS", exp: "DNS (Domain Name System) acts as the Internet's phonebook[cite: 37]." },
+      { q: "What is the primary role of DHCP?", options: ["Automatically assigns IP address, subnet mask, default gateway, and DNS server", "Transfers files between clients and servers", "Encrypts web browser traffic", "Sends email messages across mail servers"], correctText: "Automatically assigns IP address, subnet mask, default gateway, and DNS server", exp: "DHCP automatically configures joining devices[cite: 37]." },
+      { q: "Which protocol is used by web browsers and servers to transfer web pages?", options: ["HTTP", "FTP", "SMTP", "DNS"], correctText: "HTTP", exp: "HTTP transfers web pages (HTTPS is the secure, encrypted version)[cite: 37]." },
+      { q: "What is FTP used for?", options: ["Transfers files between computers (upload/download)", "Assigns dynamic IP addresses", "Translates domain names", "Filters malicious packets"], correctText: "Transfers files between computers (upload/download)", exp: "FTP (File Transfer Protocol) transfers files between hosts[cite: 37]." },
+      { q: "Which protocol sends email messages between mail servers (outgoing mail)?", options: ["SMTP", "HTTP", "DHCP", "DNS"], correctText: "SMTP", exp: "SMTP (Simple Mail Transfer Protocol) handles outgoing email delivery[cite: 37]." },
+      { q: "What does Confidentiality in the CIA Triad ensure?", options: ["Only authorized users can access sensitive data", "Data remains accurate and unaltered", "Systems remain accessible when needed", "Network speeds remain optimal"], correctText: "Only authorized users can access sensitive data", exp: "Confidentiality protects data from unauthorized access[cite: 37]." },
+      { q: "How is Integrity maintained in the CIA Triad?", options: ["Ensuring data remains accurate and unaltered using hashing/checksums", "Encrypting all storage media", "Setting up redundant power supplies", "Using strong password policies"], correctText: "Ensuring data remains accurate and unaltered using hashing/checksums", exp: "Integrity guarantees data accuracy and non-alteration[cite: 37]." },
+      { q: "What does Availability in the CIA Triad mandate?", options: ["Systems and data remain accessible when needed", "Data is hidden from public view", "Passkeys are updated monthly", "Files are stored in cloud databases"], correctText: "Systems and data remain accessible when needed", exp: "Availability ensures resources are accessible when required[cite: 37]." },
+      { q: "Which type of malware requires a host program to infect and spread?", options: ["Virus", "Worm", "Ransomware", "Trojan"], correctText: "Virus", exp: "A virus attaches to a host file to spread[cite: 37]." },
+      { q: "Which malware self-replicates across networks without needing a host program?", options: ["Worm", "Virus", "Spyware", "Trojan"], correctText: "Worm", exp: "A worm spreads independently across networks[cite: 37]." },
+      { q: "What malware encrypts files and demands payment for the decryption key?", options: ["Ransomware", "Spyware", "Trojan", "Virus"], correctText: "Ransomware", exp: "Ransomware holds user files for ransom via encryption[cite: 37]." },
+      { q: "What is a Trojan in cybersecurity?", options: ["Malware disguised as legitimate software", "A self-replicating network worm", "A hardware sniffer", "An encrypted VPN link"], correctText: "Malware disguised as legitimate software", exp: "A Trojan tricks users by posing as benign software[cite: 37]." },
+      { q: "How does a DoS attack differ from a DDoS attack?", options: ["DoS uses a single source; DDoS uses many compromised devices (botnet)", "DoS uses encryption; DDoS uses plaintext", "DoS targets email; DDoS targets web pages", "DoS is accidental; DDoS is intentional"], correctText: "DoS uses a single source; DDoS uses many compromised devices (botnet)", exp: "DoS originates from one source; DDoS uses distributed botnets[cite: 37]." },
+      { q: "What is Phishing?", options: ["Social engineering that tricks people into revealing credentials", "Encrypting hard drives remotely", "Overwhelming a server with dummy traffic", "Sniffing local Wi-Fi packets"], correctText: "Social engineering that tricks people into revealing credentials", exp: "Phishing deceives victims into revealing sensitive credentials[cite: 37]." },
+      { q: "What device or software filters traffic between trusted and untrusted networks?", options: ["Firewall", "Switch", "Hub", "Repeater"], correctText: "Firewall", exp: "Firewalls filter network traffic based on security rules[cite: 37]." },
+      { q: "What is the difference between Symmetric and Asymmetric encryption?", options: ["Symmetric uses one shared key; Asymmetric uses a public/private key pair", "Symmetric uses two keys; Asymmetric uses zero keys", "Symmetric is for storage; Asymmetric is for printing", "Symmetric cannot be decrypted"], correctText: "Symmetric uses one shared key; Asymmetric uses a public/private key pair", exp: "Symmetric = shared secret; Asymmetric = public/private key pair[cite: 37]." },
+      { q: "Authentication answers which fundamental question?", options: ["'Who are you?'", "'What are you allowed to do?'", "'Where are you located?'", "'Why are you connecting?'"], correctText: "'Who are you?'", exp: "Authentication verifies identity ('Who are you?')[cite: 37]." },
+      { q: "Authorization answers which fundamental question?", options: ["'What are you allowed to do?'", "'Who are you?'", "'When did you log in?'", "'Which key do you hold?'"], correctText: "'What are you allowed to do?'", exp: "Authorization determines permissions ('What are you allowed to do?')[cite: 37]." },
+      { q: "What does Multi-Factor Authentication (MFA) require?", options: ["Two or more factors: something you know, have, or are", "A password and a pin from the same category", "Biometrics only", "A 20-character complex passphrase"], correctText: "Two or more factors: something you know, have, or are", exp: "MFA requires multi-category factors (knowledge, possession, inherence)[cite: 37]." },
+      { q: "How does an IDS differ from an IPS?", options: ["IDS detects and alerts; IPS detects and can block malicious traffic", "IDS blocks traffic; IPS only records logs", "IDS is hardware; IPS is cloud-based", "IDS uses symmetric keys; IPS uses hashes"], correctText: "IDS detects and alerts; IPS detects and can block malicious traffic", exp: "IDS alerts on threats; IPS actively blocks them[cite: 37]." },
+      { q: "What is the purpose of a VPN (Virtual Private Network)?", options: ["Creates an encrypted connection over an untrusted network", "Speeds up internet downloads", "Assigns public IP addresses", "Replaces hardware routers"], correctText: "Creates an encrypted connection over an untrusted network", exp: "A VPN tunnels encrypted data over public networks like the Internet[cite: 37]." },
+      { q: "What benefit does Network Segmentation provide?", options: ["Divides the network into smaller zones to limit threat spread", "Increases broadcast domain size", "Removes the need for passwords", "Eliminates latency"], correctText: "Divides the network into smaller zones to limit threat spread", exp: "Segmentation isolates zones to contain breaches[cite: 37]." },
+      { q: "What is the recommended wireless security protocol?", options: ["WPA3", "WEP", "WPA", "WPA2-TKIP"], correctText: "WPA3", exp: "WPA3 provides the strongest modern Wi-Fi security[cite: 37]." },
+      { q: "What does the 3-2-1 backup rule recommend?", options: ["3 copies of data, 2 different media types, 1 offsite copy", "3 passwords, 2 firewalls, 1 router", "3 full backups daily, 2 differential, 1 incremental", "3 cloud drives, 2 local disks, 1 tape"], correctText: "3 copies of data, 2 different media types, 1 offsite copy", exp: "3-2-1 rule: 3 total copies, on 2 media types, with 1 offsite[cite: 37]." },
+      { q: "What is a Data Center?", options: ["A facility housing servers, storage, and networking equipment to deliver 24/7 services", "A cloud subscription package", "A local software database file", "A wireless base station"], correctText: "A facility housing servers, storage, and networking equipment to deliver 24/7 services", exp: "Data centers house centralized IT infrastructure[cite: 37]." },
+      { q: "How does On-premise infrastructure differ from Cloud computing?", options: ["On-premise is company-owned hardware on site; Cloud is remote provider resources over Internet", "On-premise is pay-as-you-go; Cloud requires hardware purchases", "On-premise runs only Linux; Cloud runs only Windows", "There is no difference"], correctText: "On-premise is company-owned hardware on site; Cloud is remote provider resources over Internet", exp: "On-prem holds local gear; Cloud rents remote provider resources[cite: 37]." },
+      { q: "What characterizes IaaS (Infrastructure as a Service)?", options: ["Renting virtual servers, storage, and networking while managing OS and apps", "Ready-made software used over the Internet", "Platform to run code without managing servers", "Physical hardware maintenance only"], correctText: "Renting virtual servers, storage, and networking while managing OS and apps", exp: "IaaS provides virtualized hardware (e.g. AWS EC2)[cite: 37]." },
+      { q: "What characterizes PaaS (Platform as a Service)?", options: ["Managed platform to build and run apps where you manage code and data", "Renting raw virtual hardware only", "Using ready-made apps like Gmail", "Managing physical data center cooling"], correctText: "Managed platform to build and run apps where you manage code and data", exp: "PaaS supplies app frameworks (e.g. Heroku, App Engine)[cite: 37]." },
+      { q: "What characterizes SaaS (Software as a Service)?", options: ["Ready-made applications used over the Internet where you manage data/access", "Renting OS-less virtual machines", "Writing custom database drivers", "Hosting physical server racks"], correctText: "Ready-made applications used over the Internet where you manage data/access", exp: "SaaS offers complete end-user software (e.g. Microsoft 365)[cite: 37]." },
+      { q: "How does a Bare-metal (Type 1) hypervisor run?", options: ["Directly on physical hardware for high performance", "On top of a host operating system", "Inside a Docker container", "As a browser extension"], correctText: "Directly on physical hardware for high performance", exp: "Type 1 hypervisors execute directly on physical host hardware[cite: 37]." },
+      { q: "How does a Hosted (Type 2) hypervisor run?", options: ["On top of a host operating system", "Directly on bare-metal hardware", "Without a CPU", "Inside firmware ROM"], correctText: "On top of a host operating system", exp: "Type 2 hypervisors run inside a conventional OS (e.g. VirtualBox)[cite: 37]." },
+      { q: "What is a primary advantage of Containers over full VMs?", options: ["They package apps with dependencies and share the host OS kernel (lighter and faster)", "They emulate complete hardware BIOS", "They provide full OS isolation for legacy apps", "They require no host OS"], correctText: "They package apps with dependencies and share the host OS kernel (lighter and faster)", exp: "Containers share the host kernel, enabling rapid, lightweight execution[cite: 37]." },
+      { q: "What does FCAPS stand for in network management?", options: ["Fault, Configuration, Accounting, Performance, Security", "File, Control, Access, Protection, Storage", "Fast, Continuous, Automated, Protected, Secure", "Frame, Circuit, Architecture, Protocol, System"], correctText: "Fault, Configuration, Accounting, Performance, Security", exp: "FCAPS represents the standard ISO network management working categories[cite: 38]." },
+      { q: "What does SNMP stand for?", options: ["Simple Network Management Protocol", "Secure Network Monitoring Program", "Standard Node Messaging Protocol", "System Network Maintenance Process"], correctText: "Simple Network Management Protocol", exp: "SNMP is used to monitor and manage network devices[cite: 38]." },
+      { q: "In SNMP architecture, what is the role of the Agent?", options: ["Software on the device that answers queries from the manager", "The central monitoring console", "The database of manageable variables", "The alert notification receiver"], correctText: "Software on the device that answers queries from the manager", exp: "The SNMP Agent resides on managed devices to answer queries[cite: 38]." },
+      { q: "In SNMP, what is the MIB?", options: ["Database of manageable information on the device", "The management server hardware", "The command line interface", "The trap alert packet"], correctText: "Database of manageable information on the device", exp: "MIB (Management Information Base) defines manageable parameters[cite: 38]." },
+      { q: "Which SNMP operation is used by a manager to change a parameter on a device?", options: ["SET", "GET", "TRAP", "INFORM"], correctText: "SET", exp: "SET is used to modify device settings in SNMP[cite: 38]." },
+      { q: "What is an SNMP TRAP operation?", options: ["An unsolicited alert sent by an agent to the manager", "A manager reading a variable", "An acknowledged alert message", "A database query"], correctText: "An unsolicited alert sent by an agent to the manager", exp: "TRAPs are event-driven alerts sent autonomously by agents[cite: 38]." },
+      { q: "Why is SNMPv3 preferred over SNMPv1 and v2c?", options: ["SNMPv3 adds robust authentication and encryption", "SNMPv3 uses simple community strings", "SNMPv3 requires no setup", "SNMPv3 works without IP"], correctText: "SNMPv3 adds robust authentication and encryption", exp: "SNMPv3 overcomes cleartext community string risks with encryption[cite: 38]." },
+      { q: "What is Software-Defined Networking (SDN)?", options: ["Separating the control plane from the data plane using software", "Hardcoding network switches manually", "Running web servers in containers", "Encrypting wireless frames"], correctText: "Separating the control plane from the data plane using software", exp: "SDN decouples network management (control) from packet forwarding (data)[cite: 38]." },
+      { q: "What is the primary goal of Edge Computing?", options: ["Processing data closer to the source to reduce latency and bandwidth", "Centralizing all processing in giant cloud facilities", "Eliminating local hardware storage", "Increasing network packet sizes"], correctText: "Processing data closer to the source to reduce latency and bandwidth", exp: "Edge computing processes data locally near devices[cite: 38]." },
+      { q: "What is the Internet of Things (IoT)?", options: ["Everyday devices connected to the Internet requiring IPv6 and strong security", "A private network of desktop PCs", "Cloud computing datacenters", "Virtual private network tunnels"], correctText: "Everyday devices connected to the Internet requiring IPv6 and strong security", exp: "IoT connects smart physical devices to the Internet[cite: 38]." },
+      { q: "What security risk is associated with default configurations on IoT devices?", options: ["Unchanged default passwords allow easy unauthorized access", "Automatic encryption slows down networks", "Excessive MFA prompts block users", "Excessive backup copies consume space"], correctText: "Unchanged default passwords allow easy unauthorized access", exp: "Failing to change default credentials leaves IoT open to exploitation[cite: 38]." },
+      { q: "In asymmetric encryption, which key is kept secret by the owner?", options: ["Private key", "Public key", "Shared community string", "Hash digest"], correctText: "Private key", exp: "The private key must remain strictly secret[cite: 37]." },
+      { q: "In asymmetric encryption, which key can be freely shared with anyone?", options: ["Public key", "Private key", "Symmetric master key", "Root password"], correctText: "Public key", exp: "The public key is distributed publicly for encryption/verification[cite: 37]." },
+      { q: "What is Hashing used for in network security?", options: ["Verifying data integrity", "Encrypting full disk volumes", "Assigning dynamic IP addresses", "Tunneling remote desktop sessions"], correctText: "Verifying data integrity", exp: "Hashes produce fixed digests to verify data integrity[cite: 37]." },
+      { q: "What type of attack involves overwhelming a server with traffic from a botnet?", options: ["DDoS", "Phishing", "Spyware", "Man-in-the-middle"], correctText: "DDoS", exp: "DDoS floods targets using botnets of compromised hosts[cite: 37]." },
+      { q: "Which cloud model allows you to manage application code while the provider manages the platform?", options: ["PaaS", "IaaS", "SaaS", "On-premise"], correctText: "PaaS", exp: "PaaS handles platform underlying layers so developers manage code[cite: 37]." },
+      { q: "What is the role of an SNMP Manager?", options: ["Management station that queries devices and collects alerts", "Device interface software", "Local MIB file", "Hardware switch controller"], correctText: "Management station that queries devices and collects alerts", exp: "The SNMP Manager acts as the central monitoring station[cite: 38]." }
+    ];
+
+    /* ==================== 3. OOP DATASET (50 UNIQUE ITEMS) ==================== */
+    const OOP_QUESTIONS = [
+      { q: "What is the primary control for accepting single-line or multi-line text input at runtime?", options: ["TextBox", "Label", "Button", "ListBox"], correctText: "TextBox", exp: "TextBox accepts single-line or multi-line text input at runtime[cite: 24]." },
+      { q: "Which TextBox property masks typed characters for password entry?", options: ["PasswordChar", "HideText", "MaskInput", "SecretMode"], correctText: "PasswordChar", exp: "Setting PasswordChar (e.g. to '*') masks typed input[cite: 24]." },
+      { q: "Which property allows a TextBox to span multiple lines?", options: ["Multiline = True", "WordWrap = True", "ScrollBars = Both", "AutoSize = True"], correctText: "Multiline = True", exp: "Multiline = True enables multiple lines in a TextBox[cite: 24]." },
+      { q: "What is the effect of setting ReadOnly = True on a TextBox?", options: ["Blocks editing but still lets the user select and copy text", "Greys out and blocks all user interaction", "Hides the control entirely", "Clears the text contents"], correctText: "Blocks editing but still lets the user select and copy text", exp: "ReadOnly blocks editing while permitting text selection and copying[cite: 24]." },
+      { q: "How does ReadOnly = True differ from Enabled = False on a TextBox?", options: ["Enabled = False greys out and blocks interaction completely", "ReadOnly = True prevents copying text", "Enabled = False allows text editing", "There is no functional difference"], correctText: "Enabled = False greys out and blocks interaction completely", exp: "Enabled = False disables all interaction; ReadOnly allows text copying[cite: 24]." },
+      { q: "Which event fires every time a character is typed or deleted in a TextBox?", options: ["TextChanged", "Click", "Leave", "Enter"], correctText: "TextChanged", exp: "TextChanged fires upon any character addition or deletion[cite: 24]." },
+      { q: "Which control displays non-editable descriptive text or instructions?", options: ["Label", "TextBox", "Button", "ComboBox"], correctText: "Label", exp: "Label displays non-editable text or instructions[cite: 24]." },
+      { q: "Which property changes the text displayed on a Label in VB.NET?", options: ["Text", "Caption", "Value", "DisplayString"], correctText: "Text", exp: "In VB.NET, the Text property sets Label content (Caption does not exist)[cite: 24]." },
+      { q: "Which property controls whether a Label resizes automatically to fit its text?", options: ["AutoSize", "AutoResize", "FitToText", "DynamicSize"], correctText: "AutoSize", exp: "AutoSize (default True) auto-fits Label size to its text[cite: 24]." },
+      { q: "How do you make a Label blend seamlessly with its parent form's background?", options: ["BackColor = Transparent", "Style = Flat", "Opacity = 0", "ParentColor = True"], correctText: "BackColor = Transparent", exp: "Setting BackColor = Transparent blends the label with the parent form[cite: 24]." },
+      { q: "Which property sets the bold style, size, and typeface of a Label?", options: ["Font", "TextStyle", "Appearance", "Design"], correctText: "Font", exp: "The Font property sets typeface, size, and bolding[cite: 24]." },
+      { q: "Which control lets a user choose exactly ONE option from mutually exclusive choices?", options: ["RadioButton", "CheckBox", "ListBox", "CheckedListBox"], correctText: "RadioButton", exp: "RadioButton allows choosing exactly one option among siblings[cite: 24]." },
+      { q: "To keep separate sets of RadioButtons independent on one form, you should place each set in a:", options: ["GroupBox", "Panel", "TabControl", "FlowLayoutPanel"], correctText: "GroupBox", exp: "Grouping RadioButtons inside separate GroupBoxes keeps option sets independent[cite: 24]." },
+      { q: "Which Boolean property indicates whether a RadioButton or CheckBox is selected?", options: ["Checked", "Selected", "Active", "Value"], correctText: "Checked", exp: "Checked returns True if selected, False otherwise[cite: 24]." },
+      { q: "What is the default event fired when a RadioButton's selection changes?", options: ["CheckedChanged", "Click", "SelectChanged", "CheckStateChanged"], correctText: "CheckedChanged", exp: "CheckedChanged is the default event for selection updates[cite: 24]." },
+      { q: "Setting one RadioButton's Checked property to True automatically sets all other sibling RadioButtons in that container to:", options: ["False", "True", "Indeterminate", "Null"], correctText: "False", exp: "RadioButton exclusivity sets all other siblings in the container to False[cite: 24]." },
+      { q: "Which control allows MULTIPLE independent selections?", options: ["CheckBox", "RadioButton", "ComboBox", "ListBox"], correctText: "CheckBox", exp: "CheckBox allows selecting multiple independent options[cite: 24]." },
+      { q: "What does setting ThreeState = True on a CheckBox enable?", options: ["Adds a third state called Indeterminate", "Allows three checkmarks", "Connects three controls", "Enables tri-click events"], correctText: "Adds a third state called Indeterminate", exp: "ThreeState = True adds the Indeterminate state[cite: 24]." },
+      { q: "Which property is evaluated when checking the state of a three-state CheckBox?", options: ["CheckState", "Checked", "ThreeStateValue", "StateIndex"], correctText: "CheckState", exp: "CheckState returns Checked, Unchecked, or Indeterminate[cite: 24]." },
+      { q: "What is the standard VB.NET code pattern to enable a submit button only when an 'I Agree' CheckBox is checked?", options: ["btnSubmit.Enabled = chkAgree.Checked", "btnSubmit.Visible = chkAgree.Checked", "btnSubmit.Click = chkAgree.Checked", "btnSubmit.Text = chkAgree.Text"], correctText: "btnSubmit.Enabled = chkAgree.Checked", exp: "Setting btnSubmit.Enabled = chkAgree.Checked in CheckedChanged achieves this[cite: 24]." },
+      { q: "Which Form property designates the button triggered when the user presses Enter?", options: ["AcceptButton", "CancelButton", "DefaultButton", "EnterButton"], correctText: "AcceptButton", exp: "AcceptButton assigns the form's Enter key response[cite: 24, 25]." },
+      { q: "Which Form property designates the button triggered when the user presses Esc?", options: ["CancelButton", "AcceptButton", "ExitButton", "CloseButton"], correctText: "CancelButton", exp: "CancelButton assigns the form's Esc key response[cite: 24, 25]." },
+      { q: "How does Enabled = False affect a Button compared to Visible = False?", options: ["Enabled = False prevents clicking; Visible = False hides it completely", "Enabled = False hides the button; Visible = False greys it out", "Both hide the button completely", "Neither affects user interaction"], correctText: "Enabled = False prevents clicking; Visible = False hides it completely", exp: "Enabled = False disables clicks; Visible = False hides the control entirely[cite: 24]." },
+      { q: "What is the most commonly used Button event for executing main program logic?", options: ["Click", "DoubleClick", "Hover", "MouseDown"], correctText: "Click", exp: "The Click event hosts the primary button action logic[cite: 24]." },
+      { q: "Which control organizes content into multiple tabbed pages on a single form?", options: ["TabControl", "Panel", "GroupBox", "SplitContainer"], correctText: "TabControl", exp: "TabControl organizes content into tabbed pages[cite: 24]." },
+      { q: "What are the individual page containers inside a TabControl called?", options: ["TabPages", "TabPanels", "ChildTabs", "ViewPages"], correctText: "TabPages", exp: "TabControl contains child TabPage containers[cite: 24]." },
+      { q: "Which zero-based property gets or sets the currently selected tab in a TabControl?", options: ["SelectedIndex", "ActiveTab", "CurrentPage", "TabIndex"], correctText: "SelectedIndex", exp: "SelectedIndex tracks the active tab using 0-based indexing[cite: 24]." },
+      { q: "To programmatically display the second tab of a TabControl, what value should SelectedIndex be set to?", options: ["1", "2", "0", "True"], correctText: "1", exp: "Because indexing starts at 0, index 1 selects the second tab[cite: 24]." },
+      { q: "Which property sets the title text displayed on a TabPage header?", options: ["Text", "Title", "Header", "Caption"], correctText: "Text", exp: "The Text property sets the heading on the tab header[cite: 24]." },
+      { q: "Which control displays data in a grid of rows and columns?", options: ["DataGridView", "ListBox", "ListView", "TableLayoutPanel"], correctText: "DataGridView", exp: "DataGridView displays tabular data in rows and columns[cite: 24]." },
+      { q: "Which property automatically binds a DataTable to a DataGridView?", options: ["DataSource", "DataBinding", "TableSource", "RecordSource"], correctText: "DataSource", exp: "DataSource binds DataTables directly to the grid[cite: 24]." },
+      { q: "What does setting ReadOnly = True on a DataGridView prevent?", options: ["Prevents users from editing cell values directly", "Hides all rows from view", "Blocks scrolling", "Disables row selection"], correctText: "Prevents users from editing cell values directly", exp: "ReadOnly = True disables direct cell value editing[cite: 24]." },
+      { q: "Which property specifically controls whether users can insert new blank rows at the bottom of a DataGridView?", options: ["AllowUserToAddRows", "ReadOnly", "EnableInsert", "CanAddRows"], correctText: "AllowUserToAddRows", exp: "AllowUserToAddRows toggles the new row insertion prompt[cite: 24]." },
+      { q: "What is the correct syntax to read the 'CustomerName' value from the first row of dgvOrders?", options: ["dgvOrders.Rows(0).Cells(\"CustomerName\").Value", "dgvOrders.Cells(\"CustomerName\").Rows(0)", "dgvOrders.Read(\"CustomerName\", 0)", "dgvOrders.Item(0, \"CustomerName\")"], correctText: "dgvOrders.Rows(0).Cells(\"CustomerName\").Value", exp: "Correct syntax: Rows(rowIdx).Cells(colName).Value[cite: 24]." },
+      { q: "Which event fires when a user double-clicks any cell in a DataGridView?", options: ["CellDoubleClick", "CellClick", "RowDoubleClick", "DoubleClickCell"], correctText: "CellDoubleClick", exp: "CellDoubleClick handles cell double-click interactions[cite: 24]." },
+      { q: "What is a Database?", options: ["An organized collection of data stored and retrieved electronically through a DBMS", "A simple text file on desktop", "An executable program file", "A hardware storage drive"], correctText: "An organized collection of data stored and retrieved electronically through a DBMS", exp: "A database stores organized data via a DBMS[cite: 25]." },
+      { q: "What is an in-memory representation of tables, rows, and relationships in ADO.NET?", options: ["DataSet", "DataReader", "DataCommand", "Connection"], correctText: "DataSet", exp: "DataSet is an in-memory database cache[cite: 25]." },
+      { q: "Which ADO.NET object establishes the communication session with a database server?", options: ["Connection object (e.g. SqlConnection)", "Command object", "DataAdapter", "DataReader"], correctText: "Connection object (e.g. SqlConnection)", exp: "Connection objects establish database communication[cite: 25]." },
+      { q: "Which ADO.NET object executes SQL statements like INSERT, UPDATE, or DELETE?", options: ["Command object (SqlCommand)", "Connection object", "DataSet", "DataColumn"], correctText: "Command object (SqlCommand)", exp: "Command objects execute SQL statements[cite: 25]." },
+      { q: "Which method should be called on a SqlCommand for SQL statements that do NOT return rows (INSERT, UPDATE, DELETE)?", options: ["ExecuteNonQuery()", "ExecuteReader()", "ExecuteScalar()", "Fill()"], correctText: "ExecuteNonQuery()", exp: "ExecuteNonQuery() executes non-query SQL statements[cite: 25]." },
+      { q: "What does ExecuteNonQuery() return upon successful execution?", options: ["The number of rows affected", "The newly generated primary key", "A Boolean true/false flag", "A DataTable object"], correctText: "The number of rows affected", exp: "ExecuteNonQuery() returns an integer representing rows affected[cite: 25]." },
+      { q: "Which method is used for a SELECT query that returns multiple rows of data?", options: ["ExecuteReader()", "ExecuteNonQuery()", "ExecuteScalar()", "Update()"], correctText: "ExecuteReader()", exp: "ExecuteReader() reads result rows sequentially[cite: 25]." },
+      { q: "Which method is used for a SELECT query that returns a single scalar value?", options: ["ExecuteScalar()", "ExecuteNonQuery()", "ExecuteReader()", "Fill()"], correctText: "ExecuteScalar()", exp: "ExecuteScalar() returns the first column of the first row[cite: 25]." },
+      { q: "Which DataAdapter method populates a DataSet or DataTable with query results?", options: ["Fill()", "Execute()", "Load()", "Populate()"], correctText: "Fill()", exp: "DataAdapter.Fill() populates DataSets or DataTables[cite: 25]." },
+      { q: "What category of SQL commands defines and modifies database structure (e.g. CREATE TABLE)?", options: ["DDL (Data Definition Language)", "DML (Data Manipulation Language)", "DCL (Data Control Language)", "TCL (Transaction Control Language)"], correctText: "DDL (Data Definition Language)", exp: "DDL statements manage database schemas and structures[cite: 25]." },
+      { q: "What is the correct DDL statement to create a new database named SchoolDB?", options: ["CREATE DATABASE SchoolDB", "MAKE DATABASE SchoolDB", "BUILD DATABASE SchoolDB", "NEW DATABASE SchoolDB"], correctText: "CREATE DATABASE SchoolDB", exp: "CREATE DATABASE is the standard DDL command[cite: 25]." },
+      { q: "Which SQL constraint sets a column as the unique identifier for table rows?", options: ["PRIMARY KEY", "UNIQUE IDENTIFIER", "FOREIGN KEY", "DEFAULT"], correctText: "PRIMARY KEY", exp: "PRIMARY KEY uniquely identifies each table row[cite: 25]." },
+      { q: "Which DML statement adds new rows of data into a table?", options: ["INSERT INTO", "ADD ROW", "APPEND RECORD", "CREATE ROW"], correctText: "INSERT INTO", exp: "INSERT INTO is the DML command for row insertion[cite: 25]." },
+      { q: "Inside SQL string literals, text values must be enclosed in:", options: ["Single quotes (')", "Double quotes (\")", "Backticks (`)", "Curly braces ({})"], correctText: "Single quotes (')", exp: "SQL string values require single quotation marks[cite: 25]." },
+      { q: "If column names are omitted in an INSERT INTO statement, what requirement must the VALUES list meet?", options: ["Must match all table columns in their exact schema order", "Must provide at least one value", "Must include primary key only", "Must contain text values only"], correctText: "Must match all table columns in their exact schema order", exp: "Omitted column lists require values for every table column in order[cite: 25]." }
+    ];
+
+    /* ==================== 4. PIC DATASET (50 UNIQUE ITEMS) ==================== */
+    const PIC_QUESTIONS = [
+      { q: "What is Republic Act No. 8371 commonly known as?", options: ["Indigenous Peoples' Rights Act of 1997 (IPRA)", "National Commission Act", "Ancestral Domain Law", "Cultural Heritage Act"], correctText: "Indigenous Peoples' Rights Act of 1997 (IPRA)", exp: "RA 8371 is the Indigenous Peoples' Rights Act approved on Oct 29, 1997[cite: 27]." },
+      { q: "Which government commission was created by IPRA to protect and promote IP rights?", options: ["NCIP", "NCP", "NCCA", "DENR"], correctText: "NCIP", exp: "NCIP (National Commission on Indigenous Peoples) was established by IPRA[cite: 27]." },
+      { q: "Under IPRA, what refers to the broader territory traditionally owned, occupied, or used by an Indigenous community?", options: ["Ancestral domain", "Ancestral land", "Public forest", "Private estate"], correctText: "Ancestral domain", exp: "Ancestral domain refers to the broader community territory[cite: 27]." },
+      { q: "Under IPRA, what refers to land traditionally occupied or possessed by Indigenous individuals, families, or clans?", options: ["Ancestral land", "Ancestral domain", "National park", "Civil reservation"], correctText: "Ancestral land", exp: "Ancestral land pertains to parcels occupied by individuals, families, or clans[cite: 27]." },
+      { q: "What document formally recognizes qualifying collective rights over an ancestral domain?", options: ["Certificate of Ancestral Domain Title (CADT)", "Certificate of Ancestral Land Title (CALT)", "Free Prior Informed Consent (FPIC)", "Land Patent"], correctText: "Certificate of Ancestral Domain Title (CADT)", exp: "CADT formally recognizes collective domain rights[cite: 27]." },
+      { q: "What document recognizes qualifying ancestral land rights for individuals, families, or clans?", options: ["Certificate of Ancestral Land Title (CALT)", "Certificate of Ancestral Domain Title (CADT)", "Tax Declaration", "Building Permit"], correctText: "Certificate of Ancestral Land Title (CALT)", exp: "CALT recognizes individual/family/clan land rights[cite: 27]." },
+      { q: "What does FPIC stand for in Indigenous rights law?", options: ["Free and Prior Informed Consent", "Federal Policy for Indigenous Communities", "Formal Program for Inter-Cultural Care", "Free Public Indigenous Consultation"], correctText: "Free and Prior Informed Consent", exp: "FPIC stands for Free and Prior Informed Consent[cite: 27]." },
+      { q: "What requirement ensures consent is obtained without coercion, intimidation, or manipulation?", options: ["Free", "Prior", "Informed", "Consent"], correctText: "Free", exp: "Free means consent is free from coercion or manipulation[cite: 27]." },
+      { q: "Which international declaration on Indigenous rights was adopted by the UN General Assembly in 2007?", options: ["UNDRIP", "ILO 169", "UNESCO Declaration", "Kyoto Protocol"], correctText: "UNDRIP", exp: "UNDRIP was adopted by the UN General Assembly in 2007[cite: 28]." },
+      { q: "Which ILO convention specifically addresses Indigenous and tribal peoples' rights?", options: ["ILO Convention No. 169", "ILO Convention No. 87", "ILO Convention No. 100", "ILO Convention No. 182"], correctText: "ILO Convention No. 169", exp: "ILO Convention No. 169 specifically covers Indigenous rights[cite: 28]." },
+      { q: "Which government agency handles environmental protection, watershed conservation, and natural resource management in IP areas?", options: ["DENR", "NCIP", "DepEd", "DOH"], correctText: "DENR", exp: "DENR manages environment, forests, and natural resources[cite: 28]." },
+      { q: "Which agency supports Indigenous Peoples Education (IPEd) and culturally responsive learning?", options: ["DepEd", "NCIP", "NCCA", "DA"], correctText: "DepEd", exp: "DepEd implements IPEd and culturally responsive education[cite: 28]." },
+      { q: "Which agency supports cultural documentation, traditional arts, crafts, and heritage preservation?", options: ["NCCA", "PSA", "CHR", "DENR"], correctText: "NCCA", exp: "NCCA promotes cultural documentation and arts preservation[cite: 28]." },
+      { q: "Which NGO focuses on Indigenous Peoples' policy research, education, advocacy, and climate work?", options: ["Tebtebba", "LRC", "CPA", "LACIF"], correctText: "Tebtebba", exp: "Tebtebba focuses on research, policy, and climate advocacy[cite: 28]." },
+      { q: "What does LRC (Friends of the Earth Philippines) provide to Indigenous communities?", options: ["Legal assistance and environmental justice support", "High-school scholarships only", "Medical supplies", "Agricultural machinery"], correctText: "Legal assistance and environmental justice support", exp: "LRC provides legal aid for land and environmental rights[cite: 28]." },
+      { q: "What regional advocacy group focuses on Cordillera Indigenous communities' rights and self-determination?", options: ["Cordillera Peoples Alliance (CPA)", "Tebtebba", "NCIP", "LRC"], correctText: "Cordillera Peoples Alliance (CPA)", exp: "CPA advocates for Cordillera Indigenous communities[cite: 28]." },
+      { q: "What classification applies to NCIP, DENR, and DepEd?", options: ["NGA (National Government Agency)", "NGO (Non-Governmental Organization)", "CSO (Civil Society Organization)", "Private Corporation"], correctText: "NGA (National Government Agency)", exp: "NCIP, DENR, and DepEd are National Government Agencies[cite: 29]." },
+      { q: "Is every CSO an NGO?", options: ["No, CSO is a broader category that includes NGOs, community groups, and cooperatives", "Yes, CSO and NGO mean the exact same thing", "No, CSOs are government bodies", "Yes, all CSOs are registered international charities"], correctText: "No, CSO is a broader category that includes NGOs, community groups, and cooperatives", exp: "CSO is a broad category encompassing NGOs and community groups[cite: 29]." },
+      { q: "What broad term is used for several distinct Indigenous peoples of the Cordillera?", options: ["Igorot", "Lumad", "Mangyan", "Negrito"], correctText: "Igorot", exp: "Igorot is a broad term for Cordillera peoples (Ifugao, Kalinga, etc.)[cite: 30]." },
+      { q: "Which Cordillera group is famous for rice terrace construction, woodcarving, and oral traditions?", options: ["Ifugao", "Aeta", "Gaddang", "Subanen"], correctText: "Ifugao", exp: "Ifugao is renowned for rice terraces and woodcarving[cite: 29]." },
+      { q: "Which Kalinga institution serves as a traditional peace-pact system?", options: ["Bodong", "Binanog", "T'nalak", "Okir"], correctText: "Bodong", exp: "The bodong is Kalinga's traditional peace-pact institution[cite: 29]." },
+      { q: "Which Cordillera group is historically connected to northern river systems and forests in Apayao?", options: ["Isneg / Isnag", "Ibaloi", "Bontoc", "Kankanaey"], correctText: "Isneg / Isnag", exp: "Isneg/Isnag are connected to river systems in Apayao[cite: 29]." },
+      { q: "Which Indigenous group is native to the Abra Valley and surrounding Cordillera foothills?", options: ["Tingguian / Itneg", "Dumagat", "Remontado", "Bugkalot"], correctText: "Tingguian / Itneg", exp: "Tingguian/Itneg reside in Abra Valley foothills[cite: 29]." },
+      { q: "What communities are found in the Sierra Madre range across Quezon, Rizal, and Aurora?", options: ["Dumagat", "Ifugao", "T'boli", "Ati"], correctText: "Dumagat", exp: "Dumagat communities inhabit the Sierra Madre range[cite: 29]." },
+      { q: "What is 'Mangyan' in Mindoro?", options: ["A collective term for distinct peoples (Iraya, Alangan, Hanunoo, etc.)", "A single homogeneous tribe", "A dialect of Tagalog", "A traditional woven cloth"], correctText: "A collective term for distinct peoples (Iraya, Alangan, Hanunoo, etc.)", exp: "Mangyan is a collective term for 7 distinct Mindoro peoples[cite: 30]." },
+      { q: "Which Mangyan subgroup resides in southeastern Mindoro?", options: ["Hanunoo", "Iraya", "Alangan", "Ratagnon"], correctText: "Hanunoo", exp: "Hanunoo Mangyan inhabit southeastern Mindoro[cite: 30]." },
+      { q: "Which Palawan group is known for traditional forest knowledge, farming, and coastal resource management?", options: ["Tagbanua", "Bontoc", "Isneg", "Subanen"], correctText: "Tagbanua", exp: "Tagbanua reside in central/northern Palawan and Coron[cite: 30]." },
+      { q: "Which Visayan Indigenous group is historically associated with Panay, Negros, and neighboring islands?", options: ["Ati", "Ibaloi", "T'boli", "Subanen"], correctText: "Ati", exp: "Ati communities are historically native to the Visayas[cite: 30, 31]." },
+      { q: "What upland Panay group is known for oral epics, embroidery, and the binanog dance?", options: ["Tumandok / Panay Bukidnon", "Ati", "Aeta", "Dumagat"], correctText: "Tumandok / Panay Bukidnon", exp: "Tumandok (Panay Bukidnon) practice binanog and oral epics[cite: 30, 31]." },
+      { q: "What traditional Visayan dance mimics the movements of a hawk (banog)?", options: ["Binanog", "Bodong", "T'nalak", "Okir"], correctText: "Binanog", exp: "Binanog mimics the flight of the hawk (banog)[cite: 31]." },
+      { q: "Are Ati and Tumandok the exact same Indigenous people?", options: ["No, they are distinct Indigenous peoples with different histories and cultures", "Yes, Tumandok is just another spelling of Ati", "Yes, they live in the same village", "No, Ati live in Mindanao while Tumandok live in Luzon"], correctText: "No, they are distinct Indigenous peoples with different histories and cultures", exp: "Ati and Tumandok are distinct Visayan Indigenous peoples[cite: 31]." },
+      { q: "Historically, what collective term has been used for many non-Moro Indigenous peoples of Mindanao?", options: ["Lumad", "Igorot", "Mangyan", "Moro"], correctText: "Lumad", exp: "Lumad is a collective term for non-Moro Mindanao IPs[cite: 31]." },
+      { q: "Which South Cotabato group is renowned for weaving t'nalak cloth from abaca fibers?", options: ["T'boli", "Subanen", "Higaonon", "Mamanwa"], correctText: "T'boli", exp: "T'boli weave dream-inspired t'nalak abaca cloth[cite: 31]." },
+      { q: "Which Indigenous people reside in the Zamboanga Peninsula along river valleys and uplands?", options: ["Subanen / Subanon", "Mandaya", "T'boli", "Ifugao"], correctText: "Subanen / Subanon", exp: "Subanen inhabit the Zamboanga Peninsula[cite: 31]." },
+      { q: "Which group in Bukidnon and Misamis Oriental is known for customary leadership and conflict resolution?", options: ["Higaonon", "Mamanwa", "Tagbanua", "Ati"], correctText: "Higaonon", exp: "Higaonon are known for forest ties and conflict resolution[cite: 31]." },
+      { q: "Which Indigenous people inhabit northeastern Mindanao in Surigao and Agusan areas?", options: ["Mamanwa", "T'boli", "Teduray", "Ibaloi"], correctText: "Mamanwa", exp: "Mamanwa reside in northeastern Mindanao (Caraga region)[cite: 32]." },
+      { q: "Which group is located around Mount Apo and known for rich textile traditions and beadwork?", options: ["Bagobo", "Subanen", "Gaddang", "Dumagat"], correctText: "Bagobo", exp: "Bagobo communities inhabit slopes around Mount Apo[cite: 31, 32]." },
+      { q: "Which Indigenous group inhabits Maguindanao provinces and southwestern Mindanao uplands?", options: ["Teduray", "Subanen", "Kalinga", "Bontoc"], correctText: "Teduray", exp: "Teduray inhabit southwestern Mindanao uplands[cite: 32]." },
+      { q: "What distinguishes Moro peoples from non-Moro Indigenous Peoples in Mindanao?", options: ["Moro peoples have historical ties to Islamic sultanates and Islamic culture", "Moro peoples have no ancestral lands", "Moro peoples live in Luzon", "Moro peoples are non-Filipinos"], correctText: "Moro peoples have historical ties to Islamic sultanates and Islamic culture", exp: "Moro peoples (Maguindanaon, Maranao, Tausug, etc.) have Islamic heritage[cite: 32]." },
+      { q: "Is every person living in Mindanao considered an Indigenous Person?", options: ["No, Mindanao includes Indigenous, Moro, and Christian settler communities", "Yes, living in Mindanao makes someone indigenous", "Only if they live in cities", "Only if they speak Cebuano"], correctText: "No, Mindanao includes Indigenous, Moro, and Christian settler communities", exp: "Mindanao includes diverse IP, Moro, and settler populations[cite: 32, 36]." },
+      { q: "What does IKSP stand for?", options: ["Indigenous Knowledge Systems and Practices", "Inter-Cultural Security Protocol", "International Knowledge Sharing Program", "Indigenous Key Social Policies"], correctText: "Indigenous Knowledge Systems and Practices", exp: "IKSP stands for Indigenous Knowledge Systems and Practices[cite: 32]." },
+      { q: "Which section of IPRA explicitly recognizes and protects Indigenous Peoples' rights to IKSP?", options: ["Section 34", "Section 1", "Section 10", "Section 80"], correctText: "Section 34", exp: "Section 34 of IPRA protects IKSP and cultural heritage[cite: 33]." },
+      { q: "Which of the following is an example of agricultural IKSP?", options: ["Traditional seed selection and terrace irrigation management", "Buying imported commercial fertilizers", "Using automated tractors", "Applying chemical pesticides"], correctText: "Traditional seed selection and terrace irrigation management", exp: "Seed selection and terrace upkeep are classic agricultural IKSP[cite: 33]." },
+      { q: "Which of the following is a key characteristic of IKSP?", options: ["Intergenerational and place-based", "Written in computer software code", "Standardized worldwide by governments", "Created for commercial export only"], correctText: "Intergenerational and place-based", exp: "IKSP is intergenerational, place-based, and community-driven[cite: 33]." },
+      { q: "Why is IKSP critical for environmental conservation?", options: ["Traditional ecological knowledge supports sustainable natural resource management", "It replaces all modern medical science", "It mandates clearcutting forests", "It eliminates local governance"], correctText: "Traditional ecological knowledge supports sustainable natural resource management", exp: "IKSP offers sustainable ecological and resource management methods[cite: 33]." },
+      { q: "What is a major threat to the preservation of IKSP?", options: ["Loss of ancestral lands and displacement", "Over-documentation by elders", "Excessive native language teaching", "Creation of local CADTs"], correctText: "Loss of ancestral lands and displacement", exp: "Land loss and displacement sever connections vital for IKSP[cite: 33]." },
+      { q: "Does preserving IKSP require freezing Indigenous culture in the past?", options: ["No, communities maintain identity while adapting and innovating in modern society", "Yes, Indigenous peoples cannot use modern tools", "Yes, culture must remain unchanged from ancient times", "No, IKSP should be completely abandoned"], correctText: "No, communities maintain identity while adapting and innovating in modern society", exp: "Preserving IKSP allows communities to adapt without losing identity[cite: 34]." },
+      { q: "What is an ethnographic region?", options: ["A broader geographical/administrative grouping used to organize communities for study", "A single ethnic tribe", "A legal CADT title", "A government department"], correctText: "A broader geographical/administrative grouping used to organize communities for study", exp: "Ethnographic regions organize communities geographically for study[cite: 36]." },
+      { q: "Which agency publishes official statistics including census data on ethnicity?", options: ["PSA (Philippine Statistics Authority)", "DENR", "NCIP", "DepEd"], correctText: "PSA (Philippine Statistics Authority)", exp: "PSA collects official census and demographic data[cite: 28, 36]." },
+      { q: "Which agency investigates human rights violations affecting Indigenous individuals?", options: ["CHR (Commission on Human Rights)", "PSA", "DA", "UNESCO"], correctText: "CHR (Commission on Human Rights)", exp: "CHR investigates human rights concerns within its mandate[cite: 28]." }
+    ];
+
+    /* ==================== 5. ART APPRECIATION DATASET (50 UNIQUE ITEMS) ==================== */
+    const ART_APP_QUESTIONS = [
+      { q: "What is defined as a point moving through space?", options: ["Line", "Shape", "Form", "Value"], correctText: "Line", exp: "Line is defined as a point moving through space." },
+      { q: "A two-dimensional enclosed area is known as a:", options: ["Shape", "Form", "Texture", "Space"], correctText: "Shape", exp: "Shape is a 2D flat enclosed area." },
+      { q: "A three-dimensional object with depth and volume is called a:", options: ["Form", "Shape", "Line", "Value"], correctText: "Form", exp: "Form has 3D length, width, and depth." },
+      { q: "What visual element refers to the lightness or darkness of a color?", options: ["Value", "Hue", "Saturation", "Texture"], correctText: "Value", exp: "Value describes the lightness or darkness of tones." },
+      { q: "The tactile surface quality or visual appearance of a surface is called:", options: ["Texture", "Space", "Form", "Contrast"], correctText: "Texture", exp: "Texture refers to surface roughness, smoothness, or feel." },
+      { q: "What element describes the area around, between, or within objects?", options: ["Space", "Value", "Balance", "Rhythm"], correctText: "Space", exp: "Space includes positive and negative areas around shapes." },
+      { q: "Which design principle creates a focal point that draws attention first?", options: ["Emphasis", "Balance", "Unity", "Rhythm"], correctText: "Emphasis", exp: "Emphasis makes an element stand out as the focal point." },
+      { q: "The distribution of visual weight in an artwork creates:", options: ["Balance", "Contrast", "Texture", "Perspective"], correctText: "Balance", exp: "Balance distributes visual weight to achieve stability." },
+      { q: "When all elements in an artwork work together harmoniously, it achieves:", options: ["Unity", "Emphasis", "Isolation", "Dissonance"], correctText: "Unity", exp: "Unity creates a sense of harmony and completeness." },
+      { q: "Arranging opposite visual elements (like dark vs light) creates:", options: ["Contrast", "Value", "Space", "Rhythm"], correctText: "Contrast", exp: "Contrast highlights differences between visual elements." },
+      { q: "What principle describes the size relationships between parts of an artwork?", options: ["Proportion", "Emphasis", "Texture", "Rhythm"], correctText: "Proportion", exp: "Proportion refers to relative scale and size relationships." },
+      { q: "Repetition of visual elements to guide the viewer's eye creates:", options: ["Rhythm", "Balance", "Form", "Value"], correctText: "Rhythm", exp: "Rhythm uses repeated patterns to create movement." },
+      { q: "What mnemonic helps remember the 7 Elements of Art?", options: ["Look So Fine, Can View Through Space", "Art Is Cool Every Single Day", "Lines Make Shapes Form Color Bright", "Paint Every Wall Smooth Today"], correctText: "Look So Fine, Can View Through Space", exp: "L.S.F.C.V.T.S. = Line, Shape, Form, Color, Value, Texture, Space." },
+      { q: "In visual art, what does 'Composition' mean?", options: ["The structural arrangement of visual elements", "The physical price of paint", "The size of the picture frame", "The artist's legal signature"], correctText: "The structural arrangement of visual elements", exp: "Composition refers to how artwork elements are arranged." },
+      { q: "What does 'Medium' refer to in art?", options: ["The physical materials used to create art", "The middle size of canvas", "A neutral color tone", "An average artwork score"], correctText: "The physical materials used to create art", exp: "Medium means materials like paint, clay, or ink." },
+      { q: "What does 'Content' represent in an artwork?", options: ["The underlying meaning or message", "The physical weight of the artwork", "The frame dimensions", "The resale auction value"], correctText: "The underlying meaning or message", exp: "Content is the message, theme, or story communicated." },
+      { q: "Prehistoric cave art primarily depicted:", options: ["Animals and early human hunting scenes", "Geometric abstract sculpture", "Christian religious icons", "Perspective landscapes"], correctText: "Animals and early human hunting scenes", exp: "Prehistoric art featured animals, handprints, and hunting." },
+      { q: "Medieval European art focused heavily on:", options: ["Christian religious symbolism", "Realistic anatomical studies", "Fleeting outdoor sunlight", "Industrial consumer goods"], correctText: "Christian religious symbolism", exp: "Medieval art prioritized religious spiritual themes." },
+      { q: "Which era revived realistic human anatomy, proportion, and perspective?", options: ["Renaissance", "Medieval", "Prehistoric", "Postmodernism"], correctText: "Renaissance", exp: "Renaissance art revived classical realism and perspective." },
+      { q: "What is Sfumato?", options: ["Soft, smoky transitions between color tones", "Strong harsh lighting contrast", "Carving stone with chisels", "Folding paper into forms"], correctText: "Soft, smoky transitions between color tones", exp: "Sfumato (used by da Vinci) creates soft, smoky blends." },
+      { q: "What is Chiaroscuro?", options: ["Strong contrast between light and dark to build volume", "Soft hazy atmospheric background", "Using gold leaf on icons", "Drawing with charcoal only"], correctText: "Strong contrast between light and dark to build volume", exp: "Chiaroscuro uses strong light and shade for 3D modeling." },
+      { q: "Which perspective technique uses vanishing points and converging lines?", options: ["Linear perspective", "Atmospheric perspective", "Chiaroscuro", "Sfumato"], correctText: "Linear perspective", exp: "Linear perspective uses converging lines to a vanishing point." },
+      { q: "In atmospheric perspective, distant objects appear:", options: ["Hazier, lighter, and cooler/bluer in tone", "Darker and sharper", "Larger and brighter", "Completely black"], correctText: "Hazier, lighter, and cooler/bluer in tone", exp: "Atmosphere makes distant objects hazier and bluer." },
+      { q: "Which 19th-century movement emphasized intense emotion, awe of nature, and imagination?", options: ["Romanticism", "Impressionism", "Renaissance", "Pop Art"], correctText: "Romanticism", exp: "Romanticism focused on raw emotion and nature's awe." },
+      { q: "Which movement captured fleeting light and visible brushstrokes in outdoor scenes?", options: ["Impressionism", "Medieval", "Prehistoric", "Cubism"], correctText: "Impressionism", exp: "Impressionism captured fleeting light and outdoor moments." },
+      { q: "Post-Impressionism placed greater emphasis on:", options: ["Personal expression, structure, and symbolic color", "Strict photographic realism", "Religious icons only", "Industrial blueprint drafting"], correctText: "Personal expression, structure, and symbolic color", exp: "Post-Impressionism emphasized emotional expression (e.g. Van Gogh)." },
+      { q: "Art that broke from traditional rules to experiment with new modern forms is called:", options: ["Modern Art", "Prehistoric Art", "Medieval Art", "Ancient Greek Art"], correctText: "Modern Art", exp: "Modern Art challenged traditional academic styles." },
+      { q: "Postmodernism is characterized by:", options: ["Irony, pop culture references, and combining diverse styles", "Strict adherence to Renaissance rules", "Painting only religious scenes", "Using only marble sculpture"], correctText: "Irony, pop culture references, and combining diverse styles", exp: "Postmodernism uses irony, appropriation, and mixed styles." },
+      { q: "Combining multiple distinct art materials in a single work is called:", options: ["Mixed media", "Monochrome", "Sfumato", "Linear drafting"], correctText: "Mixed media", exp: "Mixed media combines two or more distinct materials." },
+      { q: "What is Visual Texture?", options: ["The visual illusion of surface detail on a flat canvas", "The actual physical roughness felt by touch", "The sound of paint drying", "The weight of a frame"], correctText: "The visual illusion of surface detail on a flat canvas", exp: "Visual texture is the illusion of texture on a 2D surface." },
+      { q: "What is Physical Texture?", options: ["The actual tactile feel of a surface when touched", "An illusion created by shading", "A digital filter", "A perspective trick"], correctText: "The actual tactile feel of a surface when touched", exp: "Physical texture can be physically felt by touching." },
+      { q: "In contemporary art, using recycled waste materials often symbolizes:", options: ["Critique of consumerism and environmental impact", "High wealth and luxury", "Lack of artistic tools", "Adherence to ancient rules"], correctText: "Critique of consumerism and environmental impact", exp: "Recycled media often critiques consumerism and pollution." },
+      { q: "What is Appropriation in art?", options: ["Borrowing or recontextualizing existing images to create new meaning", "Copying someone's work to claim original ownership", "Buying artwork at auction", "Destroying old art"], correctText: "Borrowing or recontextualizing existing images to create new meaning", exp: "Appropriation reuses existing imagery for new critique." },
+      { q: "Marcel Duchamp adding a mustache to Mona Lisa in L.H.O.O.Q. is an example of:", options: ["Appropriation and parody", "Direct forgery", "Linear perspective", "Sfumato painting"], correctText: "Appropriation and parody", exp: "L.H.O.O.Q. is a famous Dadaist appropriation and parody." },
+      { q: "What legal doctrine allows limited use of copyrighted work for parody, critique, or education?", options: ["Fair Use", "Copyright Infringement", "VARA Right", "Patenting"], correctText: "Fair Use", exp: "Fair Use permits transformative or critical uses of copyrighted art." },
+      { q: "What does VARA (Visual Artists Rights Act) protect?", options: ["Moral rights of visual artists against destruction or distortion", "Standardized museum admission fees", "Government artwork taxes", "Auction sales pricing"], correctText: "Moral rights of visual artists against destruction or distortion", exp: "VARA protects artists' moral rights against distortion." },
+      { q: "What is Soul-making in art?", options: ["Personal growth and self-discovery through creative expression", "Mass-producing items for quick sale", "Copying museum masterpieces for profit", "Painting digital graphics"], correctText: "Personal growth and self-discovery through creative expression", exp: "Soul-making is personal growth through artistic expression." },
+      { q: "Art created primarily for commercial marketing or client specification is:", options: ["Commercial Art", "Soul-making Art", "Prehistoric Art", "Indigenous Sacred Craft"], correctText: "Commercial Art", exp: "Commercial art fulfills client and market demands." },
+      { q: "A visual story told through imagery without relying on written text is a:", options: ["Visual narrative", "Written script", "Sfumato line", "Chiaroscuro scale"], correctText: "Visual narrative", exp: "Visual narrative conveys stories through images." },
+      { q: "In visual art symbolism, broken chains generally represent:", options: ["Freedom or liberation", "Captivity and struggle", "Stormy weather", "Wealth and luxury"], correctText: "Freedom or liberation", exp: "Broken chains symbolize freedom and release." },
+      { q: "An open road stretching toward the horizon usually symbolizes:", options: ["A new journey or future opportunity", "Danger and trap", "Solitude and death", "Commercial greed"], correctText: "A new journey or future opportunity", exp: "An open road represents a new journey or opportunity." },
+      { q: "What does a rising sun typically symbolize in visual artwork?", options: ["Hope, renewal, or a new beginning", "Impending doom", "Isolation and fear", "Nighttime peace"], correctText: "Hope, renewal, or a new beginning", exp: "Rising sun symbolizes hope and new beginnings." },
+      { q: "Dark storm clouds over mountains typically convey:", options: ["Tension, uncertainty, or danger", "Joy and excitement", "Peace and harmony", "Commercial growth"], correctText: "Tension, uncertainty, or danger", exp: "Storm clouds convey tension and danger." },
+      { q: "What film audio term describes cheerful music played over a disturbing, tragic scene?", options: ["Anempathetic music", "Diegetic sound", "Linear soundtrack", "Sfumato audio"], correctText: "Anempathetic music", exp: "Anempathetic sound contrasts cheerful audio with visual tragedy." },
+      { q: "Sound that originates from within the story world (that characters can hear) is:", options: ["Diegetic sound", "Non-diegetic sound", "Anempathetic sound", "Off-screen score"], correctText: "Diegetic sound", exp: "Diegetic sound comes from inside the film world." },
+      { q: "Background score music added for the audience that characters cannot hear is:", options: ["Non-diegetic sound", "Diegetic sound", "Foley sound", "Ambient dialogue"], correctText: "Non-diegetic sound", exp: "Non-diegetic sound exists outside the story world." },
+      { q: "What traditional T'boli textile is woven from abaca fibers based on dream patterns?", options: ["T'nalak", "Inabel", "Pako Rabong", "Burnay"], correctText: "T'nalak", exp: "T'nalak is T'boli abaca cloth woven from dream motifs." },
+      { q: "What is Okir in Maranao art?", options: ["Elaborate curving plant and vine decorative motifs", "A type of clay pot", "A paper folding technique", "A warrior dance"], correctText: "Okir", exp: "Okir features curving, plant-based Maranao motifs." },
+      { q: "What traditional unglazed earthenware pottery is associated with Vigan, Ilocos Sur?", options: ["Burnay pottery", "T'nalak", "Sarimanok", "Okir ceramics"], correctText: "Burnay pottery", exp: "Burnay pottery is native to Vigan, Ilocos Sur." },
+      { q: "Origami is the traditional art of:", options: ["Paper folding into representational forms", "Wood carving", "Abaca weaving", "Clay molding"], correctText: "Paper folding into representational forms", exp: "Origami is Japanese paper folding art." }
+    ];
+
+    /* ==================== 6. AUTOMATA THEORY DATASET (50 UNIQUE ITEMS) ==================== */
+    const AUTOMATA_QUESTIONS = [
+      { q: "What is a set in computer science mathematics?", options: ["A collection of distinct objects where order does not matter", "An ordered list allowing duplicates", "A tree graph node", "A database query table"], correctText: "A collection of distinct objects where order does not matter", exp: "A set is an unordered collection of unique elements." },
+      { q: "Which method explicitly lists set elements inside curly braces, e.g. {1, 2, 3}?", options: ["Roster method", "Set-builder notation", "State diagram", "Regex string"], correctText: "Roster method", exp: "The roster method lists elements directly inside braces." },
+      { q: "Which set notation defines elements by a property, e.g. {x | x is an even integer}?", options: ["Set-builder notation", "Roster method", "Matrix table", "Graph tree"], correctText: "Set-builder notation", exp: "Set-builder notation states a condition for set membership." },
+      { q: "How many unique elements are in the set {a, a, b, c, c, c}?", options: ["3", "6", "2", "4"], correctText: "3", exp: "Duplicates are ignored in sets; unique elements are {a, b, c}." },
+      { q: "What is the formula for the number of subsets of a set with n elements?", options: ["2^n", "n^2", "2n", "n!"], correctText: "2^n", exp: "A set with n elements has 2^n subsets." },
+      { q: "How many proper subsets does a set with 3 elements have?", options: ["7", "8", "6", "3"], correctText: "7", exp: "Proper subsets exclude the set itself: 2^3 - 1 = 7." },
+      { q: "If every element of A is also in B, then A is a:", options: ["Subset of B (A ⊆ B)", "Union of B", "Proper complement of B", "Disjoint set"], correctText: "Subset of B (A ⊆ B)", exp: "A ⊆ B means every element of A belongs to B." },
+      { q: "Two sets are equal if they:", options: ["Contain the exact same elements regardless of order", "Have the same number of elements only", "Are both empty", "Are proper subsets"], correctText: "Contain the exact same elements regardless of order", exp: "Set equality requires identical elements." },
+      { q: "The Union (A ∪ B) of two sets consists of elements that are:", options: ["In A, or in B, or in both", "Only in both A and B", "In A but not in B", "Outside both A and B"], correctText: "In A, or in B, or in both", exp: "Union combines elements from both sets." },
+      { q: "The Intersection (A ∩ B) consists of elements that are:", options: ["Common to both A and B", "In A or B", "In A but not B", "In neither set"], correctText: "Common to both A and B", exp: "Intersection includes only shared elements." },
+      { q: "The Difference (A - B) consists of elements that are:", options: ["In A but not in B", "In B but not in A", "In both A and B", "In the universal set"], correctText: "In A but not in B", exp: "A - B removes elements of B from set A." },
+      { q: "The Complement of set A contains all elements that are:", options: ["In the universal set but NOT in A", "Inside set A only", "In both A and B", "In the null set"], correctText: "In the universal set but NOT in A", exp: "Complement includes all elements outside A in the universal set." },
+      { q: "A graph in computer science consists of vertices (nodes) and:", options: ["Edges (connections)", "Alphabets", "Transitions", "Kleene stars"], correctText: "Edges (connections)", exp: "Graphs consist of vertices (nodes) and edges." },
+      { q: "Two vertices directly connected by an edge are described as:", options: ["Adjacent", "Isolated", "Disjoint", "Parallel"], correctText: "Adjacent", exp: "Vertices joined by an edge are adjacent." },
+      { q: "A vertex connected to zero edges is called an:", options: ["Isolated vertex", "Accepting state", "Adjacent node", "Leaf state"], correctText: "Isolated vertex", exp: "An isolated vertex has degree 0." },
+      { q: "In directed graphs, In-degree and Out-degree refer to:", options: ["Incoming edges and outgoing edges", "Interior nodes and exterior nodes", "Accepting states and start states", "Positive and negative weights"], correctText: "Incoming edges and outgoing edges", exp: "In-degree = incoming edges; Out-degree = outgoing edges." },
+      { q: "A sequence of connected vertices in a graph is called a:", options: ["Path", "Tree", "Set", "Transition"], correctText: "Path", exp: "A path is a sequence of connected vertices." },
+      { q: "A path that does not repeat any vertex is a:", options: ["Simple path", "Circuit", "Closed loop", "Complete tree"], correctText: "Simple path", exp: "Simple paths visit vertices at most once." },
+      { q: "A path that begins and ends at the exact same vertex is a:", options: ["Circuit", "Simple path", "Tree", "Isolated path"], correctText: "Circuit", exp: "A circuit is a closed path starting and ending at the same node." },
+      { q: "A connected graph with NO simple cycles is a:", options: ["Tree", "DFA", "Circuit", "Complete graph"], correctText: "Tree", exp: "A tree is an acyclic connected graph." },
+      { q: "What is Automata Theory?", options: ["Study of abstract computing machines and computational problems", "Study of physical hardware assembly", "Study of database SQL queries", "Study of web design"], correctText: "Study of abstract computing machines and computational problems", exp: "Automata theory studies mathematical computing models." },
+      { q: "A Finite Automaton (FA) is defined by having a:", options: ["Finite number of internal states", "Infinite memory tape", "Unbounded stack", "Continuous analog circuit"], correctText: "Finite number of internal states", exp: "Finite automata operate with a finite set of states." },
+      { q: "In a Finite Automaton, Σ (Sigma) represents the:", options: ["Input alphabet", "State set", "Transition function", "Accepting states"], correctText: "Input alphabet", exp: "Σ denotes the finite set of input symbols." },
+      { q: "What defines a Deterministic Finite Automaton (DFA)?", options: ["Exactly one transition for every state and input symbol", "Multiple possible next states per symbol", "Transitions without input symbols", "Infinite states"], correctText: "Exactly one transition for every state and input symbol", exp: "A DFA has strictly one next state per input symbol." },
+      { q: "An input string is accepted by a DFA if processing ends in an:", options: ["Accepting (final) state", "Start state", "Error state", "Isolated node"], correctText: "Accepting (final) state", exp: "Strings are accepted if processing ends in a final state." },
+      { q: "Which finite state machine produces output associated strictly with its STATES?", options: ["Moore Machine", "Mealy Machine", "DFA", "NFA"], correctText: "Moore Machine", exp: "Moore machine output depends strictly on current state." },
+      { q: "Which finite state machine produces output associated with TRANSITIONS (edges)?", options: ["Mealy Machine", "Moore Machine", "Turing Machine", "Pushdown Automaton"], correctText: "Mealy Machine", exp: "Mealy machine output is attached to transition edges." },
+      { q: "The output of a Mealy Machine depends on:", options: ["Current state and current input symbol", "Current state only", "Next state only", "Start state only"], correctText: "Current state and current input symbol", exp: "Mealy outputs depend on current state and input symbol." },
+      { q: "The output of a Moore Machine depends on:", options: ["Current state only", "Current input symbol only", "Transition edge label", "Next state"], correctText: "Current state only", exp: "Moore outputs depend strictly on the current state." },
+      { q: "On a Mealy machine diagram, what does label '0 / 1' mean?", options: ["Input 0 produces output 1", "Input 1 produces output 0", "Transition between state 0 and 1", "State 0 has value 1"], correctText: "Input 0 produces output 1", exp: "In Mealy notation, input/output means input 0 gives output 1." },
+      { q: "What does a Regular Expression (RE) describe?", options: ["A regular language recognized by a finite automaton", "Context-free programming syntax", "Database schema tables", "Hardware CPU clock rates"], correctText: "A regular language recognized by a finite automaton", exp: "REs formally define regular languages." },
+      { q: "In Regular Expressions, Union (| or +) represents:", options: ["Choice between alternatives (OR)", "Sequential concatenation", "Zero or more repetitions", "Empty string"], correctText: "Choice between alternatives (OR)", exp: "Union selects between alternative patterns." },
+      { q: "In Regular Expressions, Concatenation (ab) represents:", options: ["Pattern 'a' followed by pattern 'b'", "Choice of 'a' or 'b'", "Repetition of 'a'", "Empty string"], correctText: "Pattern 'a' followed by pattern 'b'", exp: "Concatenation joins patterns sequentially." },
+      { q: "What does Kleene Star (*) represent in Regular Expressions?", options: ["Zero or more repetitions (including empty string ε)", "One or more repetitions", "Exactly one occurrence", "Negation"], correctText: "Zero or more repetitions (including empty string ε)", exp: "Kleene star denotes 0 or more repetitions." },
+      { q: "How does Kleene Plus (+) differ from Kleene Star (*)?", options: ["Plus (+) requires ONE or more occurrences (excludes ε)", "Star (*) excludes ε", "Plus (+) means choice", "Star (*) allows only one symbol"], correctText: "Plus (+) requires ONE or more occurrences (excludes ε)", exp: "a+ requires at least one occurrence of a." },
+      { q: "In Regular Expressions, what does symbol ε represent?", options: ["The empty string (length 0)", "The empty language", "Universal set", "Error state"], correctText: "The empty string (length 0)", exp: "ε represents the empty string of length 0." },
+      { q: "In Regular Expressions, what does symbol ∅ represent?", options: ["The empty language (containing no strings)", "The empty string", "Zero digit", "Null state"], correctText: "The empty language (containing no strings)", exp: "∅ represents the language containing no strings." },
+      { q: "Which Regular Expression matches ANY string over {a, b} including the empty string?", options: ["(a + b)*", "a* b*", "a+ b+", "a | b"], correctText: "(a + b)*", exp: "(a+b)* generates all combinations over {a, b} plus ε." },
+      { q: "Which Regular Expression matches strings over {a, b} that BEGIN with 'a'?", options: ["a (a + b)*", "(a + b)* a", "a* b*", "(ab)*"], correctText: "a (a + b)*", exp: "a(a+b)* mandates 'a' as the first character." },
+      { q: "Which Regular Expression matches strings over {a, b} that END with 'a'?", options: ["(a + b)* a", "a (a + b)*", "a* b*", "a+ b+"], correctText: "(a + b)* a", exp: "(a+b)*a mandates 'a' as the final character." },
+      { q: "What language does RE 0* 1* generate?", options: ["Zero or more 0s followed by zero or more 1s", "Alternating 0s and 1s", "Strings ending in 01", "Equal counts of 0 and 1"], correctText: "Zero or more 0s followed by zero or more 1s", exp: "0*1* matches sequences of 0s followed by 1s." },
+      { q: "Which RE describes binary strings that BEGIN and END with '1'?", options: ["1 (0 + 1)* 1", "(0 + 1)* 1", "1* 0* 1*", "1 + 0 + 1"], correctText: "1 (0 + 1)* 1", exp: "1(0+1)*1 forces 1 at both start and end." },
+      { q: "Which RE matches strings containing 'aba' as a substring?", options: ["(a + b)* aba (a + b)*", "aba (a + b)*", "(a + b)* aba", "a* aba b*"], correctText: "(a + b)* aba (a + b)*", exp: "Bounding with (a+b)* allows any prefix or suffix around 'aba'." },
+      { q: "Which RE matches strings over {a, b} ending with 'bb'?", options: ["(a + b)* bb", "bb (a + b)*", "b* a* bb", "(ab)* bb"], correctText: "(a + b)* bb", exp: "(a+b)*bb enforces 'bb' at the end." },
+      { q: "In Python, which module is used for regular expressions?", options: ["re", "regex", "automata", "pyre"], correctText: "re", exp: "Python's standard library provides the 're' module." },
+      { q: "Which Python RE pattern validates an input containing ONLY digits?", options: ["^[0-9]+$", "digit*", "[0-9]?", "\\d#"], correctText: "^[0-9]+$", exp: "^[0-9]+$ matches strings of one or more digits strictly." },
+      { q: "In compilers, what phase uses Regular Expressions to tokenize source code?", options: ["Lexical Analysis", "Syntax Parsing", "Code Generation", "Optimization"], correctText: "Lexical Analysis", exp: "Lexical analyzers use REs to break code into tokens." },
+      { q: "Are Finite Automata and Regular Expressions equivalent in expressive power?", options: ["Yes, both define the class of Regular Languages", "No, FAs are more powerful", "No, REs are more powerful", "Only for Mealy machines"], correctText: "Yes, both define the class of Regular Languages", exp: "Equivalence theorem proves FAs and REs describe regular languages." },
+      { q: "How many subsets exist for a set with 4 elements?", options: ["16", "15", "8", "4"], correctText: "16", exp: "2^4 = 16 total subsets." },
+      { q: "How many PROPER subsets exist for a set with 4 elements?", options: ["15", "16", "14", "8"], correctText: "15", exp: "2^4 - 1 = 15 proper subsets." }
+    ];
+
+    /* ==================== COMBINE MEGA EXAM (150 UNIQUE ITEMS) ==================== */
+    const MEGA_QUESTIONS = [
+      ...PF3_QUESTIONS.slice(0, 38),
+      ...NC101_QUESTIONS.slice(0, 38),
+      ...OOP_QUESTIONS.slice(0, 37),
+      ...PIC_QUESTIONS.slice(0, 37)
+    ]; // Strictly 150 items combined across core subjects
+
+    /* ==================== FLASHCARDS & MATCH PAIRS ==================== */
+    const MEGA_FLASHCARDS = [
+      { cat: "PF3", title: "Cha Cha Pattern", desc: "Two slow steps and a cha-cha-cha triple step[cite: 22]." },
+      { cat: "PF3", title: "Hip-hop Culture", desc: "Emerged in Bronx, NYC; involves dance, music, art, and DJing[cite: 22, 23]." },
+      { cat: "NC101", title: "DNS", desc: "Converts domain names into IP addresses (Internet phonebook)[cite: 37]." },
+      { cat: "NC101", title: "CIA Triad", desc: "Confidentiality, Integrity, and Availability principles[cite: 37]." },
+      { cat: "OOP", title: "ExecuteNonQuery()", desc: "Executes INSERT, UPDATE, DELETE; returns rows affected[cite: 25]." },
+      { cat: "OOP", title: "RadioButton", desc: "Chooses ONE option; group with GroupBox for independence[cite: 24]." },
+      { cat: "PIC", title: "IPRA (RA 8371)", desc: "1997 Philippine law protecting Indigenous Peoples' rights[cite: 27]." },
+      { cat: "PIC", title: "CADT vs CALT", desc: "CADT = collective ancestral domain; CALT = family ancestral land[cite: 27]." },
+      { cat: "Art", title: "Sfumato", desc: "Soft, smoky transitions between color tones." },
+      { cat: "Automata", title: "DFA", desc: "Exactly one transition per state and input symbol." }
+    ];
+
+    const MEGA_MATCH_PAIRS = [
+      { term: "DNS", def: "Domain to IP address[cite: 37]" },
+      { term: "ExecuteNonQuery", def: "Returns rows affected[cite: 25]" },
+      { term: "CADT", def: "Ancestral domain title[cite: 27]" },
+      { term: "FPIC", def: "Prior informed consent[cite: 27]" },
+      { term: "Cha Cha", def: "Triple step rhythm[cite: 22]" },
+      { term: "Isolation", def: "Moving one body part[cite: 23]" }
+    ];
+
+    /* STATE MANAGEMENT */
+    let activeQuestions = [];
+    let activeFlashcards = [];
+    let activeMatchPairs = [];
+
+    let currentPool = [];
+    let qIdx = 0;
+    let score = 0;
+    let streak = 0;
+    let totalXp = 500;
+    let advanceTimeout = null;
+    let userMistakes = [];
+
+    let fcIdx = 0;
+    let selectedMatchCard = null;
+    let moves = 0;
+    let matchesFound = 0;
+
+    const hubView = document.getElementById('hubView');
+    const arcadeArea = document.getElementById('arcadeArea');
+    const backMenuBtn = document.getElementById('backMenuBtn');
+
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const views = document.querySelectorAll('.view');
+    const themeBtn = document.getElementById('themeBtn');
+
+    /* EVENT LISTENERS FOR TRACK SELECTION */
+    document.getElementById('selectMega').addEventListener('click', () => {
+      loadTrack('Comprehensive Mega Exam Track', MEGA_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Mega Tip:</b> <span>150 Questions</span> ➔ <i>Master All PDF Core Concepts!</i>");
+    });
+
+    document.getElementById('selectPF3').addEventListener('click', () => {
+      loadTrack('Physical Fitness 3 (PF3)', PF3_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Dance Tip:</b> <span>Cha Cha = Triple Step</span> | <span>Bronx = Hip-Hop Origin</span>");
+    });
+
+    document.getElementById('selectNC101').addEventListener('click', () => {
+      loadTrack('Networks & Communication (NC101)', NC101_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Network Tip:</b> <span>DNS = Phonebook</span> | <span>SNMPv3 = Encrypted</span>");
+    });
+
+    document.getElementById('selectOOP').addEventListener('click', () => {
+      loadTrack('Object-Oriented Programming (SDF 104)', OOP_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>WinForms Tip:</b> <span>Enter ➔ AcceptButton</span> | <span>Esc ➔ CancelButton</span>");
+    });
+
+    document.getElementById('selectPIC').addEventListener('click', () => {
+      loadTrack('Indigenous Peoples of the Philippines (PIC)', PIC_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Law Tip:</b> <span>CADT = Domain</span> | <span>CALT = Land</span> | <span>IPRA = RA 8371</span>");
+    });
+
+    document.getElementById('selectArtApp').addEventListener('click', () => {
+      loadTrack('Art Appreciation', ART_APP_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Art Tip:</b> <span>L.S.F.C.V.T.S.</span> ➔ <i>7 Elements of Art</i>");
+    });
+
+    document.getElementById('selectAutomata').addEventListener('click', () => {
+      loadTrack('Automata Theory', AUTOMATA_QUESTIONS, MEGA_FLASHCARDS, MEGA_MATCH_PAIRS, "💡 <b>Automata Tip:</b> <span>Mealy = Transitions</span> | <span>Moore = States</span>");
+    });
+
+    backMenuBtn.addEventListener('click', () => {
+      arcadeArea.style.display = 'none';
+      hubView.style.display = 'flex';
+      backMenuBtn.style.display = 'none';
+      document.getElementById('appTitle').textContent = 'WAYGROUND';
+    });
+
+    function loadTrack(title, questions, flashcards, matchPairs, mnemonicHtml) {
+      activeQuestions = questions;
+      activeFlashcards = flashcards;
+      activeMatchPairs = matchPairs;
+
+      document.getElementById('mnemonicBanner').innerHTML = mnemonicHtml;
+      document.getElementById('appTitle').textContent = title;
+
+      hubView.style.display = 'none';
+      arcadeArea.style.display = 'flex';
+      backMenuBtn.style.display = 'inline-flex';
+
+      startQuiz(activeQuestions);
+      initMatcher();
+      fcIdx = 0;
+      updateFc();
+      initSheet();
+    }
+
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        navBtns.forEach(b => b.classList.remove('active'));
+        views.forEach(v => v.classList.remove('active'));
+        btn.classList.add('active');
+        document.getElementById(btn.dataset.target).classList.add('active');
+      });
+    });
+
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.body.getAttribute('data-theme') !== 'light';
+      document.body.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeBtn.textContent = isDark ? '☀️' : '🌙';
+    });
+
+    /* QUIZ SYSTEM */
+    function startQuiz(pool = activeQuestions) {
+      currentPool = pool;
+      qIdx = 0;
+      score = 0;
+      streak = 0;
+      userMistakes = [];
+
+      document.getElementById('quizCard').style.display = 'block';
+      document.getElementById('resultsCard').style.display = 'none';
+      renderQuestion();
+    }
+
+    function renderQuestion() {
+      clearTimeout(advanceTimeout);
+      const q = currentPool[qIdx];
+
+      document.getElementById('quizProgress').textContent = `Q ${qIdx + 1}/${currentPool.length}`;
+      document.getElementById('quizStreak').textContent = `🔥 Streak: ${streak}`;
+      document.getElementById('quizScore').textContent = `Score: ${score}`;
+      document.getElementById('questionBox').textContent = q.q;
+
+      const grid = document.getElementById('optionsGrid');
+      grid.innerHTML = '';
+
+      document.getElementById('expBox').style.display = 'none';
+
+      const shuffledOptions = [...q.options].sort(() => Math.random() - 0.5);
+
+      shuffledOptions.forEach((optText) => {
+        const btn = document.createElement('button');
+        btn.className = 'opt-btn';
+        btn.textContent = optText;
+        btn.addEventListener('click', () => handleAnswer(optText, q));
+        grid.appendChild(btn);
+      });
+    }
+
+    function handleAnswer(selectedText, q) {
+      clearTimeout(advanceTimeout);
+      const btns = document.querySelectorAll('.opt-btn');
+      btns.forEach(b => b.style.pointerEvents = 'none');
+
+      const expBox = document.getElementById('expBox');
+      expBox.textContent = q.exp;
+      expBox.style.display = 'block';
+
+      const isCorrect = selectedText === q.correctText;
+
+      btns.forEach(b => {
+        if (b.textContent === q.correctText) {
+          b.classList.add('correct');
+        } else if (b.textContent === selectedText && !isCorrect) {
+          b.classList.add('incorrect');
+        }
+      });
+
+      if (isCorrect) {
+        score += 10 + (streak * 2);
+        streak++;
+        totalXp += 10;
+        document.getElementById('xpVal').textContent = totalXp;
+      } else {
+        streak = 0;
+        userMistakes.push(q);
+      }
+
+      document.getElementById('quizStreak').textContent = `🔥 Streak: ${streak}`;
+      document.getElementById('quizScore').textContent = `Score: ${score}`;
+
+      advanceTimeout = setTimeout(() => {
+        qIdx++;
+        if (qIdx < currentPool.length) {
+          renderQuestion();
+        } else {
+          showResults();
+        }
+      }, 1500);
+    }
+
+    function showResults() {
+      document.getElementById('quizCard').style.display = 'none';
+      document.getElementById('resultsCard').style.display = 'block';
+
+      const pct = Math.round(((currentPool.length - userMistakes.length) / currentPool.length) * 100);
+      document.getElementById('finalScoreCircle').textContent = `${pct}%`;
+
+      const mistakeBtn = document.getElementById('retryMistakesBtn');
+      if (userMistakes.length > 0) {
+        document.getElementById('mistakeCount').textContent = userMistakes.length;
+        mistakeBtn.style.display = 'block';
+        mistakeBtn.onclick = () => startQuiz(userMistakes);
+      } else {
+        mistakeBtn.style.display = 'none';
+      }
+    }
+
+    document.getElementById('restartQuizBtn').addEventListener('click', () => startQuiz(activeQuestions));
+
+    /* SPEED MATCHER */
+    function initMatcher() {
+      moves = 0;
+      matchesFound = 0;
+      selectedMatchCard = null;
+      document.getElementById('matchMoves').textContent = `Moves: 0`;
+
+      const grid = document.getElementById('matchGrid');
+      grid.innerHTML = '';
+
+      let cards = [];
+      activeMatchPairs.forEach((pair, idx) => {
+        cards.push({ id: idx, text: pair.term });
+        cards.push({ id: idx, text: pair.def });
+      });
+
+      cards.sort(() => Math.random() - 0.5);
+
+      cards.forEach(c => {
+        const div = document.createElement('div');
+        div.className = 'match-card';
+        div.textContent = c.text;
+        div.dataset.id = c.id;
+
+        div.addEventListener('click', () => handleMatchClick(div));
+        grid.appendChild(div);
+      });
+    }
+
+    function handleMatchClick(card) {
+      if (card.classList.contains('matched') || card === selectedMatchCard) return;
+
+      if (!selectedMatchCard) {
+        selectedMatchCard = card;
+        card.classList.add('selected');
+      } else {
+        moves++;
+        document.getElementById('matchMoves').textContent = `Moves: ${moves}`;
+
+        if (selectedMatchCard.dataset.id === card.dataset.id) {
+          card.classList.add('matched');
+          selectedMatchCard.classList.add('matched');
+          selectedMatchCard = null;
+          matchesFound++;
+          totalXp += 20;
+          document.getElementById('xpVal').textContent = totalXp;
+
+          if (matchesFound === activeMatchPairs.length) {
+            setTimeout(() => alert(`🎉 Perfect! Cleared in ${moves} moves. +120 XP!`), 300);
+          }
+        } else {
+          card.classList.add('selected');
+          setTimeout(() => {
+            card.classList.remove('selected');
+            if (selectedMatchCard) selectedMatchCard.classList.remove('selected');
+            selectedMatchCard = null;
+          }, 500);
+        }
+      }
+    }
+
+    document.getElementById('resetMatchBtn').addEventListener('click', initMatcher);
+
+    /* FLASHCARDS */
+    const fcWrapper = document.getElementById('fcWrapper');
+    const fcCard = document.getElementById('fcCard');
+
+    fcWrapper.addEventListener('click', () => {
+      fcCard.classList.toggle('flipped');
+    });
+
+    function updateFc() {
+      fcCard.classList.remove('flipped');
+      if (activeFlashcards.length === 0) return;
+      const item = activeFlashcards[fcIdx];
+      document.getElementById('fcCat').textContent = item.cat;
+      document.getElementById('fcTitle').textContent = item.title;
+      document.getElementById('fcDesc').textContent = item.desc;
+      document.getElementById('fcCounter').textContent = `${fcIdx + 1} / ${activeFlashcards.length}`;
+    }
+
+    document.getElementById('fcPrev').addEventListener('click', (e) => {
+      e.stopPropagation();
+      fcIdx = (fcIdx - 1 + activeFlashcards.length) % activeFlashcards.length;
+      updateFc();
+    });
+
+    document.getElementById('fcNext').addEventListener('click', (e) => {
+      e.stopPropagation();
+      fcIdx = (fcIdx + 1) % activeFlashcards.length;
+      updateFc();
+    });
+
+    /* SEARCHABLE CHEATSHEET */
+    function initSheet() {
+      const list = document.getElementById('cheatList');
+      const search = document.getElementById('sheetSearch');
+
+      function render(term = '') {
+        list.innerHTML = '';
+        activeFlashcards.filter(item => 
+          item.title.toLowerCase().includes(term.toLowerCase()) || 
+          item.desc.toLowerCase().includes(term.toLowerCase())
+        ).forEach(item => {
+          const div = document.createElement('div');
+          div.className = 'cheat-row';
+          div.innerHTML = `
+            <div class="cheat-head">${item.title} <span style="font-size:0.75rem; color:var(--wg-cyan);">(${item.cat})</span></div>
+            <div class="cheat-body">${item.desc}</div>
+          `;
+          list.appendChild(div);
+        });
+      }
+
+      search.addEventListener('input', (e) => render(e.target.value));
+      render();
+    }
+  </script>
+</body>
+</html>
